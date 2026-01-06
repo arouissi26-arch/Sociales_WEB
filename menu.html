@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Carta | La Cucina di Mamma</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Italiana&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css?v=2.3">
+</head>
+
+<body class="light-mode"> <!-- Switched to Light Mode -->
+
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- 12. Hamburger Menu Button -->
+    <div class="menu-toggle magnetic">
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <!-- 12. Fullscreen Menu Overlay -->
+    <div class="menu-overlay">
+        <nav class="menu-nav">
+            <a href="index.html" class="menu-link scramble-text">Home</a>
+            <a href="index.html#historia" class="menu-link scramble-text">Història</a>
+            <a href="index.html#equip" class="menu-link scramble-text">Equip</a>
+            <a href="index.html#origen" class="menu-link scramble-text">Origen</a>
+            <a href="index.html#contacte" class="menu-link scramble-text">Contacte</a>
+        </nav>
+
+        <!-- Settings Panel inside Menu -->
+        <div class="menu-settings">
+            <h4>⚙️ Configuració</h4>
+
+            <!-- Language -->
+            <div class="setting-group">
+                <span class="setting-label">🌍 Idioma:</span>
+                <div class="setting-options">
+                    <button class="setting-btn lang-btn active" data-lang="ca">CA</button>
+                    <button class="setting-btn lang-btn" data-lang="es">ES</button>
+                    <button class="setting-btn lang-btn" data-lang="en">EN</button>
+                    <button class="setting-btn lang-btn" data-lang="it">IT</button>
+                </div>
+            </div>
+
+            <!-- Accessibility -->
+            <div class="setting-group">
+                <span class="setting-label">♿ Accessibilitat:</span>
+                <div class="setting-options">
+                    <button class="setting-btn" id="menu-increase-text">A+</button>
+                    <button class="setting-btn" id="menu-decrease-text">A-</button>
+                    <button class="setting-btn" id="menu-high-contrast">◐</button>
+                </div>
+            </div>
+
+            <!-- Music -->
+            <div class="setting-group">
+                <span class="setting-label">🎵 Música:</span>
+                <div class="setting-options">
+                    <button class="setting-btn music-btn" data-music="jazz">Jazz</button>
+                    <button class="setting-btn music-btn" data-music="classical">Clàssica</button>
+                    <button class="setting-btn music-btn active" data-music="none">🔇</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls Bar (Home + Audio + Dark Mode) -->
+    <div class="controls-bar magnetic">
+        <a href="index.html" class="back-link"
+            style="color: inherit; text-decoration: none; font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase;">←
+            Home</a>
+        <div class="control-separator">|</div>
+        <div class="audio-toggle">
+            <span>SOUND OFF</span>
+        </div>
+        <div class="control-separator">|</div>
+        <div class="dark-mode-toggle tooltip" data-tooltip="Dark Mode">🌙 DARK</div>
+    </div>
+
+    <!-- Audio Element (Required for toggle) -->
+    <audio id="bg-audio" loop>
+        <source
+            src="Vivaldi - La Primavera - Spring - Printemps -Las cuatro estaciones-Salzburger Kammerorchester (1).mp3"
+            type="audio/mpeg">
+    </audio>
+
+    <!-- Rotating Badge -->
+    <div class="badge-container magnetic"
+        style="position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; width: 100px; height: 100px; color: #111;">
+        <svg viewBox="0 0 100 100" width="100" height="100">
+            <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent" />
+            <text>
+                <textPath href="#circlePath" class="badge-text" fill="currentColor">
+                    EST. 1962 • ROME • ITALY •
+                </textPath>
+            </text>
+        </svg>
+        <div class="badge-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">★
+        </div>
+    </div>
+
+    <!-- MENU SECTION -->
+    <section id="menu" style="padding-top: 15rem;">
+        <div class="menu-page-bg"></div>
+
+        <div class="menu-page-content">
+            <div class="container">
+                <header class="menu-header">
+                    <h2 class="section-title">LA CARTA</h2>
+                    <nav class="menu-nav-filters">
+                        <button class="menu-filter active" data-filter="classic">CLÀSSIC</button>
+                        <button class="menu-filter" data-filter="postres">POSTRES</button>
+                        <button class="menu-filter" data-filter="vegan">VEGÀ</button>
+                        <button class="menu-filter" data-filter="wines">VINS</button>
+                        <button class="menu-filter" data-filter="infantil">🎈 INFANTIL</button>
+                    </nav>
+
+                    <!-- Allergen Filters -->
+                    <div class="allergen-filters">
+                        <span class="allergen-label">Evitar al·lèrgens:</span>
+                        <button class="allergen-btn" data-allergen="gluten">🌾 Gluten</button>
+                        <button class="allergen-btn" data-allergen="dairy">🥛 Làctics</button>
+                        <button class="allergen-btn" data-allergen="nuts">🥜 Fruits Secs</button>
+                        <button class="allergen-btn" data-allergen="seafood">🦐 Marisc</button>
+                        <button class="allergen-btn" data-allergen="egg">🥚 Ou</button>
+                    </div>
+                </header>
+
+                <div class="menu-list-container">
+                    <ul id="menu-items" class="menu-items">
+                        <!-- Items injected via JS -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hover Reveal Container -->
+        <div class="hover-reveal-container" id="hover-reveal">
+            <div class="reveal-inner">
+                <!-- Image injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

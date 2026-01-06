@@ -1,0 +1,428 @@
+{
+    "name": "Sistema Reservas - La Cucina di Mamma",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "nueva-reserva",
+                "responseMode": "lastNode",
+                "options": {}
+            },
+            "id": "f0f718f5-430e-4244-8134-54ef531228b2",
+            "name": "Webhook - Nueva Reserva",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                3104,
+                1808
+            ],
+            "webhookId": "5b64d904-e3a2-4867-8744-8c17a132832e"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "id-1",
+                            "name": "nombre",
+                            "value": "={{ $json.body.nombre }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-2",
+                            "name": "email",
+                            "value": "={{ $json.body.email }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-3",
+                            "name": "telefono",
+                            "value": "={{ $json.body.telefono }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-4",
+                            "name": "fecha",
+                            "value": "={{ $json.body.fecha }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-5",
+                            "name": "hora",
+                            "value": "={{ $json.body.hora }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-6",
+                            "name": "comensales",
+                            "value": "={{ $json.body.comensales }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-7",
+                            "name": "notas",
+                            "value": "={{ $json.body.notas }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-8",
+                            "name": "estado",
+                            "value": "pendiente",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-9",
+                            "name": "timestamp",
+                            "value": "={{ $now.toISO() }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "id-10",
+                            "name": "recordatorio_enviado",
+                            "value": false,
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "includeOtherFields": true,
+                "options": {}
+            },
+            "id": "cdbdbcd2-e89d-454f-b51a-e0dfeed15d7a",
+            "name": "Configuración del Workflow",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                3328,
+                1808
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const codigo = Math.floor(10000000 + Math.random() * 90000000).toString();\nreturn { json: { ...$input.item.json, codigo: codigo } };"
+            },
+            "id": "914cd03d-47e5-404d-b27b-9fd9f21a5079",
+            "name": "Generar Código de Verificación",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                3552,
+                1808
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1PzEFRvnNqK7PwcpquOOe9b6J83ns-8moZVsv4bdLZPo",
+                    "mode": "list"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "email": "={{ $json.email }}",
+                        "codigo": "={{ $json.codigo }}",
+                        "nombre": "={{ $json.nombre }}",
+                        "telefono": "={{ $json.telefono }}",
+                        "fecha": "={{ $json.fecha }}",
+                        "hora": "={{ $json.hora }}",
+                        "comensales": "={{ $json.comensales }}",
+                        "notas": "={{ $json.notas }}",
+                        "estado": "={{ $json.estado }}",
+                        "timestamp": "={{ $json.timestamp }}",
+                        "recordatorio_enviado": "={{ $json.recordatorio_enviado }}"
+                    }
+                },
+                "options": {}
+            },
+            "id": "9fc1b809-0927-4bb9-9b02-8a9898f74914",
+            "name": "Guardar en Google Sheets",
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [
+                3776,
+                1808
+            ],
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "LcEIAbY0TU2gQAw2",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "sendTo": "={{ $json.email }}",
+                "subject": "Código de verificación - La Cucina di Mamma",
+                "message": "=<h2>Tu código es: <strong>{{ $json.codigo }}</strong></h2><p>Fecha: {{ $json.fecha }} - Hora: {{ $json.hora }}</p>",
+                "options": {}
+            },
+            "id": "16887855-5ddb-40af-b41e-fc81cd5e42be",
+            "name": "Enviar Email Verificación",
+            "type": "n8n-nodes-base.gmail",
+            "typeVersion": 2.2,
+            "position": [
+                4000,
+                1808
+            ],
+            "credentials": {
+                "gmailOAuth2": {
+                    "id": "fGM5wznLSpl49fVN",
+                    "name": "Gmail account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { \"success\": true, \"message\": \"Código enviado\", \"codigo\": $json.codigo } }}"
+            },
+            "id": "nueva-response",
+            "name": "Responder Nueva Reserva",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                4224,
+                1808
+            ]
+        },
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "verificar-codigo",
+                "responseMode": "lastNode",
+                "options": {}
+            },
+            "id": "96455545-8376-4d37-a247-10ec1b39a4f4",
+            "name": "Webhook - Verificar Código",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                3104,
+                2128
+            ],
+            "webhookId": "02fa8163-d63f-4109-8b8c-f73ddb799e62"
+        },
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1PzEFRvnNqK7PwcpquOOe9b6J83ns-8moZVsv4bdLZPo",
+                    "mode": "list"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": "gid=0",
+                    "mode": "list"
+                },
+                "filtersUI": {
+                    "values": [
+                        {
+                            "lookupColumn": "email",
+                            "lookupValue": "={{ $json.body.email }}"
+                        },
+                        {
+                            "lookupColumn": "estado",
+                            "lookupValue": "pendiente"
+                        }
+                    ]
+                },
+                "options": {
+                    "sortData": {
+                        "sortFields": [
+                            {
+                                "fieldName": "timestamp",
+                                "order": "descending"
+                            }
+                        ]
+                    },
+                    "returnAllMatches": false
+                }
+            },
+            "id": "d4b80195-bd57-478a-b208-23b9279ee4e9",
+            "name": "Buscar Código en Sheets",
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [
+                3328,
+                2128
+            ],
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "LcEIAbY0TU2gQAw2",
+                    "name": "Google Sheets account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict"
+                    },
+                    "conditions": [
+                        {
+                            "id": "id-1",
+                            "leftValue": "={{ $json.codigo }}",
+                            "rightValue": "={{ $('Webhook - Verificar Código').item.json.body.codigo }}",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "02d25d2c-4f32-4d3a-bb8b-1c650e91e607",
+            "name": "¿Código Correcto?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                3552,
+                2128
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { \"success\": true, \"message\": \"Código verificado correctamente\" } }}"
+            },
+            "id": "verify-success-response",
+            "name": "Responder Código Correcto",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                3776,
+                2032
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { \"success\": false, \"message\": \"Código incorrecto\" } }}"
+            },
+            "id": "verify-error-response",
+            "name": "Responder Código Incorrecto",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.1,
+            "position": [
+                3776,
+                2224
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook - Nueva Reserva": {
+            "main": [
+                [
+                    {
+                        "node": "Configuración del Workflow",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Configuración del Workflow": {
+            "main": [
+                [
+                    {
+                        "node": "Generar Código de Verificación",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generar Código de Verificación": {
+            "main": [
+                [
+                    {
+                        "node": "Guardar en Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Guardar en Google Sheets": {
+            "main": [
+                [
+                    {
+                        "node": "Enviar Email Verificación",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Enviar Email Verificación": {
+            "main": [
+                [
+                    {
+                        "node": "Responder Nueva Reserva",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook - Verificar Código": {
+            "main": [
+                [
+                    {
+                        "node": "Buscar Código en Sheets",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Buscar Código en Sheets": {
+            "main": [
+                [
+                    {
+                        "node": "¿Código Correcto?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "¿Código Correcto?": {
+            "main": [
+                [
+                    {
+                        "node": "Responder Código Correcto",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Responder Código Incorrecto",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "active": false,
+    "settings": {
+        "availableInMCP": false
+    },
+    "meta": {
+        "instanceId": "15baad7eb0c1a6bcb013b7a946f0e51cb3ebe81c9c91e31e5ea2ca6426d9dbfe"
+    },
+    "tags": []
+}

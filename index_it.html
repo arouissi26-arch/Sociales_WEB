@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Cucina di Mamma - Restaurant Italià a Roma</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Italiana&display=swap"
+        rel="stylesheet">
+    <!-- CSS -->
+    <!-- CSS with Cache Busting -->
+    <link rel="stylesheet" href="style.css?v=2.2">
+    <!-- SEO -->
+    <meta name="description"
+        content="La Cucina di Mamma és un restaurant italià situat al centre de Roma, on cada plat explica una història i cada aroma desperta un record.">
+</head>
+
+<body>
+
+
+
+
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-text" id="preloader-text">Preparando il tuo tavolo...</div>
+    </div>
+
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Reading Progress -->
+    <div class="reading-progress"></div>
+
+    <!-- Gallery Progress Bar -->
+    <div class="gallery-progress"></div>
+
+    <!-- Particles Container -->
+    <div class="particles-container"></div>
+
+    <!-- Lightbox -->
+    <div class="lightbox">
+        <span class="lightbox-close">×</span>
+        <img src="" alt="Lightbox Image">
+    </div>
+
+
+
+    <!-- Rotating Badge -->
+    <div class="badge-container magnetic">
+        <svg viewBox="0 0 100 100" width="100" height="100">
+            <path id="circlePath" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="transparent" />
+            <text>
+                <textPath href="#circlePath" class="badge-text" fill="currentColor">
+                    EST. 1962 • ROME • ITALY •
+                </textPath>
+            </text>
+        </svg>
+        <div class="badge-center">★</div>
+    </div>
+
+    <!-- Menu Toggle Moved to Header -->
+
+    <!-- 12. Fullscreen Menu Overlay -->
+    <div class="menu-overlay">
+        <!-- Navigation Removed -->
+
+        <!-- Settings Panel inside Menu -->
+        <div class="menu-settings">
+            <button class="menu-close-btn">&times;</button>
+            <h4>⚙️ Impostazioni</h4>
+
+            <!-- Language -->
+            <div class="setting-group">
+                <span class="setting-label">🌍 Lingua:</span>
+                <div class="setting-options">
+                    <button class="setting-btn lang-btn" data-lang="ca">CA</button>
+                    <button class="setting-btn lang-btn" data-lang="es">ES</button>
+                    <button class="setting-btn lang-btn" data-lang="en">EN</button>
+                    <button class="setting-btn lang-btn active" data-lang="it">IT</button>
+                </div>
+            </div>
+
+            <!-- Accessibility -->
+            <div class="setting-group">
+                <span class="setting-label">♿ Accessibilità:</span>
+                <div class="setting-options">
+                    <button class="setting-btn" id="menu-increase-text">A+</button>
+                    <button class="setting-btn" id="menu-decrease-text">A-</button>
+                    <button class="setting-btn" id="menu-high-contrast">◐</button>
+                </div>
+            </div>
+
+            <!-- Music -->
+            <div class="setting-group">
+                <span class="setting-label">🎵 Música:</span>
+                <div class="setting-options">
+                    <button class="setting-btn music-btn" data-music="jazz">Jazz</button>
+                    <button class="setting-btn music-btn" data-music="classical">Clàssica</button>
+                    <button class="setting-btn music-btn active" data-music="none">🔇</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls Bar (Audio + Dark Mode) -->
+    <div class="controls-bar magnetic">
+        <div class="audio-toggle">
+            <span>SOUND OFF</span>
+        </div>
+        <div class="control-separator">|</div>
+        <div class="dark-mode-toggle tooltip" data-tooltip="Dark Mode">🌙 DARK</div>
+    </div>
+    <audio id="bg-audio" loop>
+        <!-- User provided Vivaldi file -->
+        <source
+            src="Vivaldi - La Primavera - Spring - Printemps -Las cuatro estaciones-Salzburger Kammerorchester (1).mp3"
+            type="audio/mpeg">
+    </audio>
+
+    <!-- 9. Back To Top -->
+    <div class="back-to-top magnetic">↑</div>
+
+    <!-- 8. Scroll Percentage -->
+    <div class="scroll-percentage">0%</div>
+
+    <!-- 6. Rome Time Widget + Top Navigation -->
+    <div class="top-right-nav">
+        <a href="menu.html" class="top-nav-link magnetic">🍽️ MENU</a>
+        <span class="nav-separator">|</span>
+        <a href="reservations.html" class="top-nav-link magnetic">📞 PRENOTA</a>
+        <span class="nav-separator">|</span>
+        <div class="menu-toggle magnetic"
+            style="position: relative; top: auto; right: auto; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+            <div class="hamburger-icon" style="display: flex; flex-direction: column; gap: 4px;">
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <span class="top-nav-link">OPZIONI</span>
+        </div>
+        <span class="nav-separator">|</span>
+        <div class="rome-time">ROME: <span id="time-display">00:00:00</span></div>
+    </div>
+
+    <!-- Newsletter Popup -->
+    <div id="newsletter-popup" class="newsletter-modal">
+        <div class="newsletter-content">
+            <button class="newsletter-close" aria-label="Tancar">&times;</button>
+
+            <!-- Image Section -->
+            <div class="newsletter-image"
+                style="width: 100%; height: 200px; border-radius: 12px; overflow: hidden; margin-bottom: 2rem;">
+                <img src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=600&h=400&fit=crop&auto=format&q=80"
+                    alt="Italian Food" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+
+            <div class="newsletter-body">
+                <div
+                    style="background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); color: white; padding: 0.5rem 1rem; border-radius: 50px; display: inline-block; margin-bottom: 1rem; font-size: 0.9rem; font-weight: 600;">
+                    🎁 OFFERTA ESCLUSIVA
+                </div>
+                <h2 style="font-family: var(--font-display); font-size: 2rem; margin-bottom: 1rem; color: #1A1A1A;">
+                    20% di Sconto
+                </h2>
+                <p style="margin-bottom: 2rem; color: #666; font-size: 1rem; line-height: 1.6;">
+                    Iscriviti e ricevi un <strong>20% di sconto</strong> sulla tua prossima visita, oltre a offerte
+                    esclusive ed eventi speciali
+                </p>
+                <form id="newsletter-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <input type="text" id="newsletter-name" placeholder="Nome (opzionale)"
+                        style="padding: 1rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; font-family: var(--font-body);">
+                    <input type="email" id="newsletter-email" placeholder="La tua email *" required
+                        style="padding: 1rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; font-family: var(--font-body);">
+                    <button type="submit"
+                        style="padding: 1rem 2rem; background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); color: white; border: none; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s;">
+                        Voglio il mio 20% 🎉
+                    </button>
+                </form>
+                <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #999; text-align: center;">
+                    ✓ Solo per nuovi iscritti · Cancella quando vuoi
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 15. Sticky Sidebar Navigation -->
+    <div class="sidebar-nav">
+        <a href="#hero" class="dot active"></a>
+        <a href="#historia" class="dot"></a>
+        <a href="#equip" class="dot"></a>
+        <a href="#origen" class="dot"></a>
+        <a href="#contacte" class="dot"></a>
+    </div>
+
+    <!-- 5. Spotlight Overlay -->
+    <div class="spotlight"></div>
+
+
+    <!-- SVG Filters for Liquid Effects -->
+    <svg style="display: none;">
+        <defs>
+            <filter id="liquid">
+                <feTurbulence baseFrequency="0.01 0.01" numOctaves="1" result="warp"></feTurbulence>
+                <feDisplacementMap in2="warp" in="SourceGraphic" scale="20" xChannelSelector="R" yChannelSelector="G">
+                </feDisplacementMap>
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <header>
+        <div class="logo">La Cucina di Mamma</div>
+        <!-- Nav moved to overlay -->
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero">
+            <h1><span class="scramble-text liquid">La Cucina di Mamma</span></h1>
+            <p>Un ristorante italiano situato nel centro di Roma, dove ogni piatto racconta una storia e ogni profumo
+                risveglia un
+                ricordo.</p>
+        </section>
+
+        <!-- Infinite Marquee -->
+        <div class="marquee-container">
+            <div class="marquee-content">
+                <span>TRADITION • PASSION • ROME • AUTHENTIC • TASTE • </span>
+                <span>TRADITION • PASSION • ROME • AUTHENTIC • TASTE • </span>
+                <span>TRADITION • PASSION • ROME • AUTHENTIC • TASTE • </span>
+                <span>TRADITION • PASSION • ROME • AUTHENTIC • TASTE • </span>
+            </div>
+        </div>
+
+        <!-- 7. Horizontal Scroll Gallery - Authentic Italian -->
+        <section id="gallery" class="gallery-section">
+            <div class="gallery-wrapper">
+                <div class="gallery-item"><img
+                        src="https://images.unsplash.com/photo-1556761223-4c4282c73f77?w=600&h=400&fit=crop&q=80"
+                        alt="Pasta Fresca Artigianale"></div>
+                <div class="gallery-item"><img
+                        src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600&h=400&fit=crop&q=80"
+                        alt="Tiramisù Classico"></div>
+                <div class="gallery-item"><img
+                        src="https://images.unsplash.com/photo-1633337474564-1d9478ca4e2e?w=600&h=400&fit=crop&q=80"
+                        alt="Risotto alla Milanese"></div>
+                <div class="gallery-item"><img
+                        src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&h=400&fit=crop&q=80"
+                        alt="Interior Trattoria Romana"></div>
+                <div class="gallery-item"><img
+                        src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&h=400&fit=crop&q=80"
+                        alt="Vino Chianti Toscano"></div>
+            </div>
+        </section>
+
+        <!-- Historia Section -->
+        <section id="historia" class="container">
+            <div class="content-grid">
+                <div class="text-col">
+                    <h2>La Storia di Antonieta</h2>
+                    <p>Antonieta è una donna italiana di 62 anni che ha sempre avuto una storia molto speciale.
+                        È
+                        nata in una famiglia che lavorava nel settore primario: i suoi genitori erano contadini
+                        e
+                        passavano la giornata curando la terra e le coltivazioni. È cresciuta circondata da
+                        campi,
+                        animali e il
+                        duro lavoro della campagna.</p>
+                    <p>Fin da piccola, Antonieta ha scoperto di avere una grande passione per la cucina
+                        italiana. Le
+                        piaceva vedere come sua madre preparava piatti tradizionali con ingredienti freschi del
+                        campo.
+                        Sognava di poter cucinare per molte persone un giorno, ma pensava sempre che, per la sua
+                        classe
+                        sociale e il luogo da cui proveniva, quei sogni fossero troppo grandi e difficili da
+                        realizzare.
+                    </p>
+                    <p>Ma questo non l'ha fermata. Dopo aver lavorato molto ha creato ''La Cucina di Mamma'', un
+                        ristorante con cibo tradizionale italiano che le ricorda sua madre. Oggi il ristorante
+                        è molto popolare tra turisti e italiani. Un paio di anni fa Antonieta è andata in
+                        pensione e ha
+                        ceduto l'incarico a quattro giovani dipendenti provenienti dalla Spagna, con l'illusione
+                        di
+                        seguire il sogno
+                        di Antonieta.</p>
+                </div>
+                <div class="image-col">
+                    <!-- Filled the missing spot -->
+                    <img src="assets/antonieta_cooking.png" alt="Antonieta Cooking" class="img-fluid"
+                        style="border-radius: 5px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Logo Section - Bento Grid Design -->
+        <section id="logo" class="container logo-section">
+            <div class="logo-header">
+                <span class="section-label">Identità Visiva</span>
+                <h2>Perché il nostro logo?</h2>
+                <p class="logo-intro">Ogni elemento del nostro logo spiega una parte della nostra storia</p>
+            </div>
+
+            <div class="logo-bento">
+                <!-- Logo central grande -->
+                <div class="bento-item bento-logo">
+                    <img src="assets/logo.png" alt="Logo La Cucina di Mamma">
+                </div>
+
+                <!-- Card 1: Olivera -->
+                <div class="bento-item bento-card">
+                    <div class="bento-icon">🌿</div>
+                    <h3>Il Ramo di Ulivo</h3>
+                    <p>Simbolo millenario della cultura mediterranea. Rappresenta la pace, la prosperità e
+                        la
+                        connessione con
+                        la terra.</p>
+                </div>
+
+                <!-- Card 2: Cercle -->
+                <div class="bento-item bento-card">
+                    <div class="bento-icon">⭕</div>
+                    <h3>Il Cerchio</h3>
+                    <p>Simboleggia l'unità familiare. Ogni cliente fa parte della nostra famiglia.</p>
+                </div>
+
+                <!-- Card 3: Tipografia -->
+                <div class="bento-item bento-card">
+                    <div class="bento-icon">✒️</div>
+                    <h3>Tipografia Elegante</h3>
+                    <p>Riflette il carattere gourmet. Sofisticatezza e calore di casa in ogni lettera.</p>
+                </div>
+
+                <!-- Card 4: Colors -->
+                <div class="bento-item bento-card">
+                    <div class="bento-icon">🎨</div>
+                    <h3>Colori Sobri</h3>
+                    <p>Crema su nero: eleganza senza tempo e lusso discreto.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Equipo Section -->
+        <section id="equip" class="container">
+            <h2>Il nostro team</h2>
+            <div class="team-grid">
+                <div class="team-card gs-reveal">
+                    <div class="team-img-wrapper">
+                        <img src="assets/noa_portrait.png" alt="Noa" class="team-img">
+                    </div>
+                    <h3>Noa</h3>
+                    <span class="team-role">CAMERIERA</span>
+                    <p>Si distingue per la sua gentilezza e per l'ottima attenzione al pubblico.</p>
+                </div>
+                <div class="team-card gs-reveal">
+                    <div class="team-img-wrapper">
+                        <img src="assets/micaela_portrait.png" alt="Micaela" class="team-img">
+                    </div>
+                    <h3>Micaela</h3>
+                    <span class="team-role">CAMERIERA</span>
+                    <p>Insieme a Noa, garantisce che ogni cliente abbia un'esperienza eccezionale.</p>
+                </div>
+                <div class="team-card gs-reveal">
+                    <div class="team-img-wrapper">
+                        <img src="assets/aissa_portrait.png" alt="Aissa" class="team-img">
+                    </div>
+                    <h3>Aissa</h3>
+                    <span class="team-role">CASSIERE</span>
+                    <p>Si occupa della gestione e di un buon incasso con efficacia; la sua partecipazione è
+                        fondamentale.</p>
+                </div>
+                <div class="team-card gs-reveal">
+                    <div class="team-img-wrapper">
+                        <img src="assets/jan_portrait.png" alt="Jan" class="team-img">
+                    </div>
+                    <h3>Jan</h3>
+                    <span class="team-role">CHEF</span>
+                    <p>Elabora squisiti piatti gourmet che risvegliano le papille gustative. Un'esplosione
+                        di sapori
+                        grazie alla sua passione.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Origen Section -->
+        <section id="origen" class="container">
+            <div class="origin-layout">
+                <img src="assets/origen_toscana.png" alt="Fattoria in Toscana" class="origin-image gs-reveal">
+                <div class="origin-text gs-reveal">
+                    <h2>Origine degli Alimenti</h2>
+                    <p>Nella nostra cucina utilizziamo alimenti di origine naturale, cioè ingredienti
+                        che raccogliamo
+                        direttamente. Abbiamo una fattoria agricola in Toscana. Si tratta di una tenuta
+                        biologica
+                        attiva dove
+                        coltiviamo grano, semi di girasole, farro e ceci, tra le altre colture.</p>
+                    <p>Nella pianura della Maremma coltiviamo riso, in particolare varietà come
+                        Carnaroli o Arborio,
+                        sfruttando i suoli più pianeggianti e l'acqua disponibile per la semina.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metodes / Tecnica Section -->
+        <section id="metodes" class="container">
+            <h2>Metodi Agricoli e Filosofia</h2>
+
+            <div class="methods-grid">
+                <div class="method-item gs-reveal">
+                    <h3>Il Grano</h3>
+                    <img src="assets/maquinaria_harvester.png" alt="Raccolto di grano" class="img-fluid"
+                        style="margin: 1rem 0;">
+                    <p>Si coltiva preparando prima la terra con trattori e aratri moderni. Si semina
+                        con
+                        seminatrici
+                        uniformi.</p>
+                    <ul class="feature-list">
+                        <li>Seminatrici uniformi</li>
+                        <li>Irrigazione automatica e controllo dei parassiti</li>
+                        <li>Raccolto con "mietitrebbie" (tagliano, trebbiano e separano)</li>
+                    </ul>
+                </div>
+
+                <div class="method-item gs-reveal">
+                    <h3>Il Riso</h3>
+                    <img src="assets/arros_maremma.png" alt="Campi di riso" class="img-fluid" style="margin: 1rem 0;">
+                    <p>Richiede campi allagati, livellati con attrezzature speciali. Varietà:
+                        Carnaroli, Arborio.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Campi allagati e livellati</li>
+                        <li>Raccolto drenando l'acqua</li>
+                        <li>Separazione meccanica del chicco</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin-top: 4rem" class="gs-reveal">
+                <h3>Filosofia Sostenibile</h3>
+                <p>Nel nostro ristorante italiano crediamo che la buona cucina inizi dalla terra.
+                    Piccoli appezzamenti (
+                    <1 ha) delimitati da elementi naturali. Priorizziamo l'agricoltura biologica: senza pesticidi
+                        artificiali né OGM. Concimi organici e rispetto per la biodiversità e i ritmi naturali.</p>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="container" style="padding: 8rem 0;">
+            <h2 style="text-align: center; margin-bottom: 4rem;">Cosa dicono i nostri clienti
+            </h2>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"La migliore esperienza gastronomica italiana
+                        fuori dall'Italia. I
+                        piatti
+                        di Antonieta sono autentici e pieni di sapore. Totalmente raccomandato!"
+                    </p>
+                    <div class="testimonial-author">
+                        <strong>Maria G.</strong>
+                        <span>Barcellona</span>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Il personale è incantevole e l'atmosfera ti
+                        trasporta direttamente a
+                        Roma.
+                        Gli ingredienti freschi della loro stessa fattoria fanno la differenza."
+                    </p>
+                    <div class="testimonial-author">
+                        <strong>Paolo R.</strong>
+                        <span>Milano</span>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Un gioiello nascosto nel centro di Roma. La
+                        passione per la cucina
+                        tradizionale
+                        si nota in ogni piatto. Torneremo di sicuro!"</p>
+                    <div class="testimonial-author">
+                        <strong>Sophie L.</strong>
+                        <span>Parigi</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section id="historia-timeline" class="container" style="padding: 6rem 0;">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 4rem;">La
+                Nostra Storia</h2>
+
+            <div class="timeline">
+                <div class="timeline-item" data-aos="fade-up">
+                    <div class="timeline-year">1962</div>
+                    <div class="timeline-content">
+                        <h3>🍝 Antonieta apre il ristorante</h3>
+                        <p>Con un sogno e le ricette di sua nonna, Antonieta ha aperto le
+                            porte de La Cucina di
+                            Mamma nel cuore di Roma.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="timeline-year">1975</div>
+                    <div class="timeline-content">
+                        <h3>🏆 Primo premio gastronomico</h3>
+                        <p>Il nostro tiramisù tradizionale vince il premio "Dolce d'Oro" di
+                            Roma, mettendoci sulla mappa
+                            culinaria.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="timeline-year">1990</div>
+                    <div class="timeline-content">
+                        <h3>🏠 Espansione del locale</h3>
+                        <p>Raddoppiamo lo spazio per accogliere più famiglie che vogliono
+                            provare l'autentica cucina
+                            italiana.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="timeline-year">2020</div>
+                    <div class="timeline-content">
+                        <h3>👨‍👩‍👧 Tradizione di 3 generazioni</h3>
+                        <p>La nipote di Antonieta, Sofia, diventa executive chef,
+                            continuando l'eredità di famiglia
+                            con orgoglio.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section with Live Counter -->
+        <section id="estadistiques" class="stats-section" style="padding: 5rem 0; background: rgba(139, 69, 19, 0.05);">
+            <div class="container">
+                <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">I Nostri Numeri
+                </h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card" data-aos="zoom-in">
+                        <div class="stat-icon">🍝</div>
+                        <div class="stat-number" id="platos-counter">1000</div>
+                        <div class="stat-label">Piatti Serviti</div>
+                        <div class="stat-live">🔴 IN DIRETTA</div>
+                    </div>
+
+                    <div class="stat-card" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-number">4.9<span style="font-size: 0.5em;">/5</span></div>
+                        <div class="stat-label">Valutazione Media</div>
+                    </div>
+
+                    <div class="stat-card" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-number" data-count="500">0</div>
+                        <div class="stat-label">Clienti Soddisfatti</div>
+                    </div>
+
+                    <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-number">62</div>
+                        <div class="stat-label">Anni di Tradizione</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="container" style="padding: 6rem 0;">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">Domande Frequenti
+            </h2>
+
+            <div class="faq-container" style="max-width: 800px; margin: 0 auto;">
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question">
+                        <h3>❓ Accettate prenotazioni?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sì! Puoi prenotare il tuo tavolo tramite il nostro
+                            sistema online o chiamandoci direttamente.
+                            Consigliamo di prenotare in anticipo, specialmente nei
+                            fine settimana.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="faq-question">
+                        <h3>🥗 Avete opzioni vegetariane/vegane?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Certamente! Il nostro menù include diverse opzioni
+                            vegetariane e vegane, sempre
+                            preparate con gli stessi ingredienti freschi di qualità.
+                            Chiedi al nostro team per
+                            consigli.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="faq-question">
+                        <h3>🅿️ C'è parcheggio disponibile?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Abbiamo una convenzione con il parcheggio "Garage
+                            Condotti" a soli 50 metri dal ristorante.
+                            I nostri clienti ottengono uno sconto del 30%
+                            presentando lo scontrino del ristorante.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="faq-question">
+                        <h3>💳 Quali metodi di pagamento accettate?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Accettiamo contanti, carte di credito/debito (Visa,
+                            Mastercard, American Express) e pagamenti
+                            digitali come Apple Pay e Google Pay.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="faq-question">
+                        <h3>👶 È un ristorante per famiglie?</h3>
+                        <span class="faq-toggle">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Assolutamente! Siamo un ristorante familiare e amiamo
+                            accogliere famiglie con bambini.
+                            Disponiamo di
+                            seggioloni, un menù speciale per bambini e fasciatoi nei
+                            bagni.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="conocenos" class="section-conocenos"
+            style="padding: 6rem 0; background: linear-gradient(135deg, rgba(139, 69, 19, 0.05), rgba(114, 47, 55, 0.05));">
+            <div class="container">
+                <h2 class="section-title" style="text-align: center; margin-bottom: 4rem;">Chi Siamo
+                </h2>
+
+                <div class="about-grid"
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+                    <div class="about-card" data-aos="fade-up">
+                        <div class="about-icon">👨‍🍳</div>
+                        <h3>La Chef Antonieta</h3>
+                        <p>Nata a Roma nel 1940, Antonieta ha imparato le
+                            ricette tradizionali da sua nonna. Nel
+                            1962, a soli 22 anni, ha aperto La Cucina di Mamma
+                            con il sogno di condividere l'autentica
+                            cucina italiana con il mondo.</p>
+                    </div>
+
+                    <div class="about-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="about-icon">🏠</div>
+                        <h3>Storia del Ristorante</h3>
+                        <p>Dal 1962, siamo stati un pilastro della gastronomia
+                            romana. Tre generazioni della famiglia
+                            hanno
+                            continuato la tradizione, mantenendo le ricette
+                            originali mentre abbracciamo ingredienti di
+                            stagione.</p>
+                    </div>
+
+                    <div class="about-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="about-icon">🎯</div>
+                        <h3>Filosofia Culinaria</h3>
+                        <p>"Mangiare non è solo nutrirsi, è creare ricordi."
+                            Crediamo nella cucina onesta, con
+                            ingredienti locali e di qualità. Ogni piatto è un
+                            abbraccio della Mamma.</p>
+                    </div>
+
+                    <div class="about-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="about-icon">🌾</div>
+                        <h3>Origine degli Ingredienti</h3>
+                        <p>I nostri ingredienti vengono direttamente da fattorie
+                            locali della Toscana, Sicilia e
+                            Lazio. Pasta artigianale, pomodori coltivati al
+                            sole, olio d'oliva extra vergine DOP.</p>
+                    </div>
+
+                    <div class="about-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="about-icon">❤️</div>
+                        <h3>Perché lo facciamo</h3>
+                        <p>Perché ogni sorriso di un cliente ci ricorda perché
+                            abbiamo iniziato. Perché la cucina
+                            italiana
+                            è amore diventato realtà. Perché siamo, e saremo
+                            sempre, La Cucina di Mamma.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Before/After Slider -->
+        <section id="evolucion" class="slider-section" style="padding: 6rem 0;">
+            <div class="container">
+                <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">La
+                    Nostra Evoluzione</h2>
+                <p style="text-align: center; margin-bottom: 3rem; opacity: 0.8;">
+                    Scorri per vedere come siamo cresciuti
+                    dal
+                    1962</p>
+
+                <div class="before-after-slider">
+                    <div class="slider-container">
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop&blend=000&sat=-100"
+                            alt="Restaurant 1962" class="before-image">
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop"
+                            alt="Restaurant 2024" class="after-image">
+                        <div class="slider-handle">
+                            <div class="slider-button">⟷</div>
+                        </div>
+                        <div class="slider-label left">1962</div>
+                        <div class="slider-label right">2024</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <p style="font-style: italic; opacity: 0.8;">
+                        Da un piccolo locale familiare a un punto di
+                        riferimento della cucina italiana a Roma
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Awards Section -->
+        <section id="premios" class="awards-section" style="padding: 6rem 0; background: rgba(139, 69, 19, 0.03);">
+            <div class="container">
+                <h2 class="section-title" style="text-align: center; margin-bottom: 4rem;">
+                    Premi e Riconoscimenti</h2>
+
+                <div class="awards-grid">
+                    <div class="award-card" data-aos="zoom-in">
+                        <div class="award-icon">🏆</div>
+                        <h3>Miglior Ristorante Italiano</h3>
+                        <p class="award-year">2023</p>
+                        <p class="award-org">Guida Gastronomica di Roma
+                        </p>
+                    </div>
+
+                    <div class="award-card" data-aos="zoom-in" data-aos-delay="100">
+                        <div class="award-icon">⭐</div>
+                        <h3>3 Stelle Michelin</h3>
+                        <p class="award-year">2020-2024</p>
+                        <p class="award-org">Guida Michelin</p>
+                    </div>
+
+                    <div class="award-card" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="award-icon">🎖️</div>
+                        <h3>Certificato di Eccellenza</h3>
+                        <p class="award-year">2015-2024</p>
+                        <p class="award-org">TripAdvisor</p>
+                    </div>
+
+                    <div class="award-card" data-aos="zoom-in" data-aos-delay="300">
+                        <div class="award-icon">✅</div>
+                        <h3>Certificato di Qualità</h3>
+                        <p class="award-year">2024</p>
+                        <p class="award-org">Associazione Ristoratori
+                        </p>
+                    </div>
+
+                    <div class="award-card" data-aos="zoom-in" data-aos-delay="400">
+                        <div class="award-icon">🌱</div>
+                        <h3>Cucina Sostenibile</h3>
+                        <p class="award-year">2022</p>
+                        <p class="award-org">Green Restaurant
+                            Association</p>
+                    </div>
+
+                    <div class="award-card" data-aos="zoom-in" data-aos-delay="500">
+                        <div class="award-icon">❤️</div>
+                        <h3>Preferito dai Clienti</h3>
+                        <p class="award-year">2010-2024</p>
+                        <p class="award-org">4.9/5 ★ (2,847 reviews)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Location & Map Section -->
+        <section id="ubicacion" class="location-section" style="padding: 6rem 0;">
+            <div class="container">
+                <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">
+                    Come Arrivare</h2>
+
+                <div class="location-grid"
+                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;">
+                    <div class="location-info">
+                        <div class="location-detail" data-aos="fade-right">
+                            <h3>📍 Indirizzo</h3>
+                            <p>Via dei Condotti, 47<br>00187 Roma,
+                                Italia</p>
+                        </div>
+
+                        <div class="location-detail" data-aos="fade-right" data-aos-delay="100">
+                            <h3>🚇 Trasporto Pubblico</h3>
+                            <p><strong>Metro:</strong> Linea A -
+                                Stazione Spagna (5 min a piedi)<br>
+                                <strong>Bus:</strong> 117, 119, 590
+                            </p>
+                        </div>
+
+                        <div class="location-detail" data-aos="fade-right" data-aos-delay="200">
+                            <h3>🅿️ Parcheggio</h3>
+                            <p><strong>Garage Condotti</strong> -
+                                50m (30% sconto)<br>
+                                <strong>Villa Borghese</strong> -
+                                800m a piedi
+                            </p>
+                        </div>
+
+                        <div class="location-detail" data-aos="fade-right" data-aos-delay="300">
+                            <h3>🚶 Vicino a...</h3>
+                            <p>🏛️ Fontana di Trevi - 3 min<br>
+                                🛍️ Via del Corso - 2 min<br>
+                                🎨 Piazza di Spagna - 5 min</p>
+                        </div>
+
+                        <a href="https://maps.google.com/?q=Via+dei+Condotti+47+Roma" target="_blank"
+                            class="btn-primary" style="display: inline-block; margin-top: 2rem;">
+                            🗺️ Apri su Google Maps
+                        </a>
+                    </div>
+
+                    <div class="map-container" data-aos="fade-left">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2969.5853803178636!2d12.478643315504193!3d41.90574027922075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132f6053c9e58709%3A0x3b1e4c3e64e7c8c!2sVia%20dei%20Condotti%2C%2000187%20Roma%20RM%2C%20Italy!5e0!3m2!1sen!2ses!4v1234567890"
+                            width="100%" height="450"
+                            style="border:0; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);"
+                            allowfullscreen="" loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="contacte" class="footer-reveal">
+        <div class="footer-content container">
+            <!-- CTA Reserva -->
+            <div class="reservation-cta" style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="margin-bottom: 1rem; font-size: 2rem; font-weight: 400;">Prenota il tuo tavolo</h2>
+                <p style="margin-bottom: 2rem; font-size: 1rem; opacity: 0.8;">Vivi l'autentica esperienza italiana</p>
+                <a href="reservations.html" class="btn-reservation">
+                    Prenota
+                </a>
+            </div>
+
+            <!-- Info + Mapa en una sola columna centrada -->
+            <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+                <h3 style="font-size: 1.3rem; margin-bottom: 0.75rem; font-weight: 400;">La Cucina di Mamma</h3>
+                <p style="font-size: 0.95rem; opacity: 0.7; margin-bottom: 1rem;">Via dei Condotti, Roma, Italia</p>
+
+                <div style="display: flex; gap: 2rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
+                    <a href="tel:+393270913317"
+                        style="color: #F5F5F0; text-decoration: none; font-size: 1rem; opacity: 0.9; transition: opacity 0.3s;">📞
+                        +39 327 091 3317</a>
+                    <a href="https://instagram.com/lacucina_dimamma" target="_blank"
+                        style="color: #F5F5F0; text-decoration: none; font-size: 1rem; opacity: 0.9; transition: opacity 0.3s;">📸
+                        @lacucina_dimamma</a>
+                    <a href="#" id="open-newsletter-btn"
+                        style="color: #F5F5F0; text-decoration: none; font-size: 1rem; opacity: 0.9; transition: opacity 0.3s;">📧
+                        Newsletter (20% OFF)</a>
+                </div>
+
+                <!-- Mapa centrado -->
+                <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2969.6!2d12.4798!3d41.9054!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132f6055d2b6f7c7%3A0x9a06b4c6a8b4c6a8!2sVia%20dei%20Condotti!5e0!3m2!1ses!2ses"
+                        width="100%" height="200" style="border:0; filter: grayscale(50%) brightness(0.8);"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Legal Links -->
+            <div
+                style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center;">
+                <div
+                    style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; font-size: 0.85rem; opacity: 0.7;">
+                    <a href="privacy.html" style="color: #F5F5F0; text-decoration: none;">Politica sulla Privacy</a>
+                    <span style="color: rgba(255,255,255,0.3);">|</span>
+                    <a href="privacy.html#cookies" style="color: #F5F5F0; text-decoration: none;">Cookies</a>
+                    <span style="color: rgba(255,255,255,0.3);">|</span>
+                    <span>© 2026 La Cucina di Mamma</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- AOS - Animate on Scroll -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script src="https://unpkg.com/split-type"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
