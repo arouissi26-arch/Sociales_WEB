@@ -12,7 +12,7 @@
         rel="stylesheet">
     <!-- CSS -->
     <!-- CSS with Cache Busting -->
-    <link rel="stylesheet" href="style.css?v=2.2">
+    <link rel="stylesheet" href="style.css?v=2.6">
     <!-- SEO -->
     <meta name="description"
         content="La Cucina di Mamma és un restaurant italià situat al centre de Roma, on cada plat explica una història i cada aroma desperta un record.">
@@ -84,6 +84,7 @@
                 </div>
             </div>
 
+
             <!-- Accessibility -->
             <div class="setting-group">
                 <span class="setting-label">♿ Accessibilitat:</span>
@@ -94,25 +95,19 @@
                 </div>
             </div>
 
-            <!-- Music -->
-            <div class="setting-group">
-                <span class="setting-label">🎵 Música:</span>
-                <div class="setting-options">
-                    <button class="setting-btn music-btn" data-music="jazz">Jazz</button>
-                    <button class="setting-btn music-btn" data-music="classical">Clàssica</button>
-                    <button class="setting-btn music-btn active" data-music="none">🔇</button>
-                </div>
-            </div>
+
         </div>
     </div>
 
-    <!-- Controls Bar (Audio + Dark Mode) -->
+    <!-- Controls Bar (Audio + Dark Mode + Gift) -->
     <div class="controls-bar magnetic">
         <div class="audio-toggle">
             <span>SOUND OFF</span>
         </div>
         <div class="control-separator">|</div>
         <div class="dark-mode-toggle tooltip" data-tooltip="Dark Mode">🌙 DARK</div>
+        <div class="control-separator">|</div>
+        <button class="gift-btn" data-action="gift">🎁 REGALA</button>
     </div>
     <audio id="bg-audio" loop>
         <!-- User provided Vivaldi file -->
@@ -124,6 +119,62 @@
     <!-- 9. Back To Top -->
     <div class="back-to-top magnetic">↑</div>
 
+    <!-- AI Concierge Chat Widget -->
+    <div class="ai-chat-widget" id="ai-chat-widget">
+        <!-- Floating Button Trigger -->
+        <button class="ai-chat-trigger" id="ai-chat-trigger" aria-label="Obrir xat amb Antonieta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="ai-chat-badge">1</span>
+        </button>
+
+        <!-- Chat Window -->
+        <div class="ai-chat-window" id="ai-chat-window">
+            <!-- Header -->
+            <div class="ai-chat-header">
+                <div class="ai-chat-avatar">
+                    <img src="assets/antonieta_portrait.png" alt="Antonieta" onerror="this.innerHTML='👩‍🍳'">
+                </div>
+                <div class="ai-chat-info">
+                    <span class="ai-chat-name">Antonieta</span>
+                    <span class="ai-chat-status">Concierge IA • En línia</span>
+                </div>
+                <button class="ai-chat-close" id="ai-chat-close" aria-label="Tancar xat">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Messages Area -->
+            <div class="ai-chat-messages" id="ai-chat-messages">
+                <!-- Messages will be added here dynamically -->
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="ai-chat-typing" id="ai-chat-typing">
+                <div class="typing-dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <span>Antonieta està escrivint...</span>
+            </div>
+
+            <!-- Input Area -->
+            <div class="ai-chat-input-area">
+                <input type="text" class="ai-chat-input" id="ai-chat-input" placeholder="Escriu el teu missatge..."
+                    autocomplete="off">
+                <button class="ai-chat-send" id="ai-chat-send" aria-label="Enviar">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- 8. Scroll Percentage -->
     <div class="scroll-percentage">0%</div>
 
@@ -132,6 +183,8 @@
         <a href="menu.html" class="top-nav-link magnetic">🍽️ MENU</a>
         <span class="nav-separator">|</span>
         <a href="reservations.html" class="top-nav-link magnetic">📞 RESERVA</a>
+        <span class="nav-separator">|</span>
+        <a href="order.html" class="top-nav-link magnetic" style="color: var(--accent-color);">🛵 COMANDA</a>
         <span class="nav-separator">|</span>
         <div class="menu-toggle magnetic"
             style="position: relative; top: auto; right: auto; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
@@ -163,10 +216,10 @@
                     🎁 OFERTA EXCLUSIVA
                 </div>
                 <h2 style="font-family: var(--font-display); font-size: 2rem; margin-bottom: 1rem; color: #1A1A1A;">
-                    20% de Descompte
+                    10€ de Descompte
                 </h2>
                 <p style="margin-bottom: 2rem; color: #666; font-size: 1rem; line-height: 1.6;">
-                    Subscriu-te i rebràs un <strong>20% de descompte</strong> en la teva pròxima visita, a més d'ofertes
+                    Subscriu-te i rebràs un <strong>descompte de 10€</strong> en la teva pròxima visita, a més d'ofertes
                     exclusives i esdeveniments especials
                 </p>
                 <form id="newsletter-form" style="display: flex; flex-direction: column; gap: 1rem;">
@@ -176,7 +229,7 @@
                         style="padding: 1rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; font-family: var(--font-body);">
                     <button type="submit"
                         style="padding: 1rem 2rem; background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%); color: white; border: none; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.2s;">
-                        Vull el meu 20% 🎉
+                        Vull els meus 10€ 🎉
                     </button>
                 </form>
                 <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #999; text-align: center;">
@@ -220,6 +273,21 @@
         <!-- Nav moved to overlay -->
     </header>
 
+    <!-- Promo Countdown Banner -->
+    <div class="promo-banner" id="promo-banner">
+        <div class="promo-content">
+            <span class="promo-icon">🍷</span>
+            <span class="promo-text">
+                <strong>OFERTA ESPECIAL:</strong> Fes una comanda i t'obsequiem amb una ampolla de vi!
+            </span>
+            <span class="promo-timer">
+                Acaba en: <span id="promo-countdown">00:00:00</span>
+            </span>
+            <a href="order.html" class="promo-cta">DEMANAR ARA →</a>
+        </div>
+        <button class="promo-close" id="promo-close" aria-label="Tancar">×</button>
+    </div>
+
     <main>
         <!-- Hero Section -->
         <section id="hero">
@@ -237,6 +305,81 @@
                 <span>TRADITION • PASSION • ROME • AUTHENTIC • TASTE • </span>
             </div>
         </div>
+
+        <!-- As Seen In (Press Section) - Auto-Scrolling Marquee -->
+        <section id="press" class="press-section gs-reveal" style="overflow: hidden; padding: 3rem 0;">
+            <div class="container">
+                <span class="section-label"
+                    style="display: block; text-align: center; margin-bottom: 2rem; opacity: 0.6;">VIST A</span>
+            </div>
+
+            <style>
+                @keyframes marquee-scroll {
+                    0% {
+                        transform: translateX(0);
+                    }
+
+                    100% {
+                        transform: translateX(-50%);
+                    }
+                }
+
+                .marquee-track {
+                    display: flex;
+                    animation: marquee-scroll 20s linear infinite;
+                    width: fit-content;
+                }
+
+                .marquee-track:hover {
+                    animation-play-state: paused;
+                }
+
+                .marquee-logo {
+                    flex-shrink: 0;
+                    padding: 0 4rem;
+                    font-size: 2.5rem;
+                    font-weight: 600;
+                    opacity: 0.7;
+                    transition: opacity 0.3s;
+                    white-space: nowrap;
+                }
+
+                .marquee-logo:hover {
+                    opacity: 1;
+                }
+            </style>
+
+            <div style="overflow: hidden;">
+                <div class="marquee-track">
+                    <!-- First set of logos -->
+                    <div class="marquee-logo" style="font-family: 'Georgia', serif;">La Vanguardia</div>
+                    <div class="marquee-logo" style="font-family: 'Times New Roman', serif; font-weight: bold;">EL PAÍS
+                    </div>
+                    <div class="marquee-logo"
+                        style="font-family: 'Helvetica', sans-serif; font-weight: 900; letter-spacing: -1px;">Time Out
+                    </div>
+                    <div class="marquee-logo" style="font-family: 'Didot', serif; font-style: italic;">Condé Nast
+                        Traveler</div>
+                    <div class="marquee-logo" style="font-family: 'Didot', serif; letter-spacing: 2px;">VOGUE</div>
+                    <div class="marquee-logo" style="font-family: 'Playfair Display', serif;">Forbes</div>
+                    <div class="marquee-logo" style="font-family: 'Helvetica', sans-serif; font-weight: 300;">The New
+                        York Times</div>
+                    <!-- Duplicated for seamless loop -->
+                    <div class="marquee-logo" style="font-family: 'Georgia', serif;">La Vanguardia</div>
+                    <div class="marquee-logo" style="font-family: 'Times New Roman', serif; font-weight: bold;">EL PAÍS
+                    </div>
+                    <div class="marquee-logo"
+                        style="font-family: 'Helvetica', sans-serif; font-weight: 900; letter-spacing: -1px;">Time Out
+                    </div>
+                    <div class="marquee-logo" style="font-family: 'Didot', serif; font-style: italic;">Condé Nast
+                        Traveler</div>
+                    <div class="marquee-logo" style="font-family: 'Didot', serif; letter-spacing: 2px;">VOGUE</div>
+                    <div class="marquee-logo" style="font-family: 'Playfair Display', serif;">Forbes</div>
+                    <div class="marquee-logo" style="font-family: 'Helvetica', sans-serif; font-weight: 300;">The New
+                        York Times</div>
+                </div>
+            </div>
+        </section>
 
         <!-- 7. Horizontal Scroll Gallery - Authentic Italian -->
         <section id="gallery" class="gallery-section">
@@ -427,85 +570,96 @@
             </div>
         </section>
 
-        <!-- Testimonials Section -->
-        <section id="testimonials" class="container" style="padding: 8rem 0;">
-            <h2 style="text-align: center; margin-bottom: 4rem;">Què diuen els nostres clients</h2>
+        <!-- Google Reviews Section -->
+        <section id="google-reviews" class="container"
+            style="padding: 6rem 0; background: #fff; border-radius: 20px; margin: 4rem auto;">
+            <h2 style="text-align: center; margin-bottom: 0.5rem; font-size: 2.5rem; color: #1a1a1a; font-weight: 700;">
+                Què diuen de nosaltres
+            </h2>
+            <p style="text-align: center; color: #666; margin-bottom: 3rem; font-size: 1.1rem;">
+                Més de 100 clients reals ens han deixat la seva opinió
+            </p>
 
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"La millor experiència gastronòmica italiana fora d'Itàlia. Els plats
-                        d'Antonieta són autèntics i plens de sabor. Totalment recomanable!"</p>
-                    <div class="testimonial-author">
-                        <strong>Maria G.</strong>
-                        <span>Barcelona</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 3rem; justify-content: center; align-items: flex-start;">
+                <!-- Google Badge -->
+                <div style="text-align: center; min-width: 200px;">
+                    <div style="font-size: 1.5rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.5rem;">EXCEL·LENT
                     </div>
+                    <div style="font-size: 2rem; color: #f4b400; letter-spacing: 2px;">★★★★★</div>
+                    <p style="color: #666; font-size: 0.95rem; margin: 0.5rem 0;">A base de <strong>147
+                            ressenyes</strong></p>
+                    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png"
+                        alt="Google" style="height: 30px; margin-top: 0.5rem;">
                 </div>
 
-                <div class="testimonial-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"El personal és encantador i l'ambient et transporta directament a Roma.
-                        Els ingredients frescos de la seva pròpia granja fan la diferència."</p>
-                    <div class="testimonial-author">
-                        <strong>Paolo R.</strong>
-                        <span>Milano</span>
-                    </div>
-                </div>
+                <!-- Review Cards Carousel -->
+                <div class="reviews-carousel"
+                    style="display: flex; gap: 1.5rem; overflow-x: auto; max-width: 700px; padding: 1rem 0; scroll-snap-type: x mandatory;">
 
-                <div class="testimonial-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"Una joia amagada al centre de Roma. La passió per la cuina tradicional
-                        es nota en cada plat. Tornarem segur!"</p>
-                    <div class="testimonial-author">
-                        <strong>Sophie L.</strong>
-                        <span>Paris</span>
+                    <!-- Review 1 -->
+                    <div class="review-card"
+                        style="min-width: 300px; background: #f9f9f9; border-radius: 12px; padding: 1.5rem; border: 1px solid #e0e0e0; scroll-snap-align: start;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <div
+                                style="width: 40px; height: 40px; border-radius: 50%; background: #4285f4; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                                M</div>
+                            <div>
+                                <strong style="color: #1a1a1a;">Maria Garcia</strong>
+                                <img src="https://www.google.com/favicon.ico" alt="G"
+                                    style="height: 14px; margin-left: 5px; vertical-align: middle;">
+                                <div style="font-size: 0.8rem; color: #888;">fa 2 mesos</div>
+                            </div>
+                        </div>
+                        <div style="color: #f4b400; margin-bottom: 0.5rem;">★★★★★ <span style="color: #34a853;">✓</span>
+                        </div>
+                        <p style="color: #333; font-size: 0.95rem; line-height: 1.5;">La millor experiència gastronòmica
+                            italiana fora d'Itàlia. Els plats d'Antonieta són autèntics i plens de sabor!</p>
                     </div>
+
+                    <!-- Review 2 -->
+                    <div class="review-card"
+                        style="min-width: 300px; background: #f9f9f9; border-radius: 12px; padding: 1.5rem; border: 1px solid #e0e0e0; scroll-snap-align: start;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <img src="https://lh3.googleusercontent.com/a/default-user=s40-c" alt="Avatar"
+                                style="width: 40px; height: 40px; border-radius: 50%;">
+                            <div>
+                                <strong style="color: #1a1a1a;">Paolo Romano</strong>
+                                <img src="https://www.google.com/favicon.ico" alt="G"
+                                    style="height: 14px; margin-left: 5px; vertical-align: middle;">
+                                <div style="font-size: 0.8rem; color: #888;">fa 5 mesos</div>
+                            </div>
+                        </div>
+                        <div style="color: #f4b400; margin-bottom: 0.5rem;">★★★★★ <span style="color: #34a853;">✓</span>
+                        </div>
+                        <p style="color: #333; font-size: 0.95rem; line-height: 1.5;">El personal és encantador i
+                            l'ambient et transporta directament a Roma. Els ingredients frescos fan la diferència.</p>
+                    </div>
+
+                    <!-- Review 3 -->
+                    <div class="review-card"
+                        style="min-width: 300px; background: #f9f9f9; border-radius: 12px; padding: 1.5rem; border: 1px solid #e0e0e0; scroll-snap-align: start;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <div
+                                style="width: 40px; height: 40px; border-radius: 50%; background: #ea4335; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                                S</div>
+                            <div>
+                                <strong style="color: #1a1a1a;">Sophie Laurent</strong>
+                                <img src="https://www.google.com/favicon.ico" alt="G"
+                                    style="height: 14px; margin-left: 5px; vertical-align: middle;">
+                                <div style="font-size: 0.8rem; color: #888;">fa 8 mesos</div>
+                            </div>
+                        </div>
+                        <div style="color: #f4b400; margin-bottom: 0.5rem;">★★★★★ <span style="color: #34a853;">✓</span>
+                        </div>
+                        <p style="color: #333; font-size: 0.95rem; line-height: 1.5;">Una joia amagada al centre de
+                            Roma. La passió per la cuina tradicional es nota en cada plat. Tornarem segur!</p>
+                    </div>
+
                 </div>
             </div>
         </section>
 
-        <!-- Timeline Section -->
-        <section id="historia-timeline" class="container" style="padding: 6rem 0;">
-            <h2 class="section-title" style="text-align: center; margin-bottom: 4rem;">La Nostra Història</h2>
 
-            <div class="timeline">
-                <div class="timeline-item" data-aos="fade-up">
-                    <div class="timeline-year">1962</div>
-                    <div class="timeline-content">
-                        <h3>🍝 Antonieta obre el restaurant</h3>
-                        <p>Amb un somni i les receptes de la seva àvia, Antonieta va obrir les portes de La Cucina di
-                            Mamma al cor de Roma.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item" data-aos="fade-up" data-aos-delay="100">
-                    <div class="timeline-year">1975</div>
-                    <div class="timeline-content">
-                        <h3>🏆 Primer premi gastronòmic</h3>
-                        <p>El nostre tiramisú tradicional guanya el premi "Dolce d'Oro" de Roma, posant-nos en el mapa
-                            culinari.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item" data-aos="fade-up" data-aos-delay="200">
-                    <div class="timeline-year">1990</div>
-                    <div class="timeline-content">
-                        <h3>🏠 Expansió del local</h3>
-                        <p>Doblem l'espai per acollir més famílies que volen experimentar l'autèntica cuina italiana.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="timeline-item" data-aos="fade-up" data-aos-delay="300">
-                    <div class="timeline-year">2020</div>
-                    <div class="timeline-content">
-                        <h3>👨‍👩‍👧 Tradició de 3 generacions</h3>
-                        <p>La neta d'Antonieta, Sofia, es converteix en chef executiva, continuant l'herència familiar
-                            amb orgull.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- Stats Section with Live Counter -->
         <section id="estadistiques" class="stats-section" style="padding: 5rem 0; background: rgba(139, 69, 19, 0.05);">
@@ -652,34 +806,7 @@
             </div>
         </section>
 
-        <!-- Before/After Slider -->
-        <section id="evolucion" class="slider-section" style="padding: 6rem 0;">
-            <div class="container">
-                <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">La Nostra Evolució</h2>
-                <p style="text-align: center; margin-bottom: 3rem; opacity: 0.8;">Desliza per veure com hem crescut des
-                    de 1962</p>
 
-                <div class="before-after-slider">
-                    <div class="slider-container">
-                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop&blend=000&sat=-100"
-                            alt="Restaurant 1962" class="before-image">
-                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop"
-                            alt="Restaurant 2024" class="after-image">
-                        <div class="slider-handle">
-                            <div class="slider-button">⟷</div>
-                        </div>
-                        <div class="slider-label left">1962</div>
-                        <div class="slider-label right">2024</div>
-                    </div>
-                </div>
-
-                <div style="text-align: center; margin-top: 2rem;">
-                    <p style="font-style: italic; opacity: 0.8;">
-                        De un petit local familiar a un referent de la cuina italiana a Roma
-                    </p>
-                </div>
-            </div>
-        </section>
 
         <!-- Awards Section -->
         <section id="premios" class="awards-section" style="padding: 6rem 0; background: rgba(139, 69, 19, 0.03);">
@@ -793,9 +920,12 @@
             <div class="reservation-cta" style="text-align: center; margin-bottom: 3rem;">
                 <h2 style="margin-bottom: 1rem; font-size: 2rem; font-weight: 400;">Reserva la teva taula</h2>
                 <p style="margin-bottom: 2rem; font-size: 1rem; opacity: 0.8;">Viu l'experiència autèntica italiana</p>
-                <a href="reservations.html" class="btn-reservation">
-                    Reservar
-                </a>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <a href="reservations.html" class="btn-reservation">Reservar Taula</a>
+                    <button onclick="openReferralModal()" class="btn-reservation"
+                        style="background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color);">🎁
+                        Guanya 10€</button>
+                </div>
             </div>
 
             <!-- Info + Mapa en una sola columna centrada -->
@@ -812,7 +942,7 @@
                         @lacucina_dimamma</a>
                     <a href="#" id="open-newsletter-btn"
                         style="color: #F5F5F0; text-decoration: none; font-size: 1rem; opacity: 0.9; transition: opacity 0.3s;">📧
-                        Newsletter (20% OFF)</a>
+                        Newsletter (10€ OFF)</a>
                 </div>
 
                 <!-- Mapa centrado -->
@@ -849,6 +979,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="script.js"></script>
+    <!-- Referral Modal -->
+    <div id="referral-modal" class="newsletter-modal" style="display: none; z-index: 10001;">
+        <div class="newsletter-content" style="text-align: center; max-width: 500px;">
+            <button class="newsletter-close" onclick="closeReferralModal()">&times;</button>
+            <div style="font-size: 3rem; margin-bottom: 1rem;">💸</div>
+            <h2 style="font-family: var(--font-display); font-size: 2rem; color: #1A1A1A; margin-bottom: 1rem;">Guanya
+                10€</h2>
+            <p style="color: #666; margin-bottom: 2rem;">Comparteix aquest enllaç amb amics. Si reserven, tu guanyes 10€
+                i ells 10€ de descompte.</p>
+
+            <div
+                style="background: #f5f5f5; padding: 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+                <input type="text" id="referral-link" value="https://lacucinadimamma.com/ref/USER123" readonly
+                    style="width: 100%; border: none; background: transparent; color: #333; font-family: monospace;">
+                <button onclick="copyReferralLink()"
+                    style="background: #ddd; border: none; padding: 0.5rem; border-radius: 4px; cursor: pointer;">📋</button>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button onclick="shareWhatsapp()"
+                    style="background: #25D366; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 600; cursor: pointer;">WhatsApp</button>
+                <button onclick="shareTelegram()"
+                    style="background: #0088cc; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 50px; font-weight: 600; cursor: pointer;">Telegram</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>

@@ -84,6 +84,7 @@
                 </div>
             </div>
 
+
             <!-- Accessibility -->
             <div class="setting-group">
                 <span class="setting-label">♿ Accesibilidad:</span>
@@ -94,25 +95,19 @@
                 </div>
             </div>
 
-            <!-- Music -->
-            <div class="setting-group">
-                <span class="setting-label">🎵 Música:</span>
-                <div class="setting-options">
-                    <button class="setting-btn music-btn" data-music="jazz">Jazz</button>
-                    <button class="setting-btn music-btn" data-music="classical">Clàssica</button>
-                    <button class="setting-btn music-btn active" data-music="none">🔇</button>
-                </div>
-            </div>
+
         </div>
     </div>
 
-    <!-- Controls Bar (Audio + Dark Mode) -->
+    <!-- Controls Bar (Audio + Dark Mode + Gift) -->
     <div class="controls-bar magnetic">
         <div class="audio-toggle">
             <span>SOUND OFF</span>
         </div>
         <div class="control-separator">|</div>
         <div class="dark-mode-toggle tooltip" data-tooltip="Dark Mode">🌙 DARK</div>
+        <div class="control-separator">|</div>
+        <button class="gift-btn" data-action="gift">🎁 REGALA</button>
     </div>
     <audio id="bg-audio" loop>
         <!-- User provided Vivaldi file -->
@@ -123,6 +118,48 @@
 
     <!-- 9. Back To Top -->
     <div class="back-to-top magnetic">↑</div>
+
+    <!-- AI Concierge Chat Widget -->
+    <div class="ai-chat-widget" id="ai-chat-widget">
+        <button class="ai-chat-trigger" id="ai-chat-trigger" aria-label="Abrir chat con Antonieta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="ai-chat-badge">1</span>
+        </button>
+        <div class="ai-chat-window" id="ai-chat-window">
+            <div class="ai-chat-header">
+                <div class="ai-chat-avatar">
+                    <img src="assets/antonieta_portrait.png" alt="Antonieta" onerror="this.innerHTML='👩‍🍳'">
+                </div>
+                <div class="ai-chat-info">
+                    <span class="ai-chat-name">Antonieta</span>
+                    <span class="ai-chat-status">Concierge IA • En línea</span>
+                </div>
+                <button class="ai-chat-close" id="ai-chat-close" aria-label="Cerrar chat">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="ai-chat-messages" id="ai-chat-messages"></div>
+            <div class="ai-chat-typing" id="ai-chat-typing">
+                <div class="typing-dots"><span></span><span></span><span></span></div>
+                <span>Antonieta está escribiendo...</span>
+            </div>
+            <div class="ai-chat-input-area">
+                <input type="text" class="ai-chat-input" id="ai-chat-input" placeholder="Escribe tu mensaje..."
+                    autocomplete="off">
+                <button class="ai-chat-send" id="ai-chat-send" aria-label="Enviar">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- 8. Scroll Percentage -->
     <div class="scroll-percentage">0%</div>
@@ -219,6 +256,21 @@
         <div class="logo">La Cucina di Mamma</div>
         <!-- Nav moved to overlay -->
     </header>
+
+    <!-- Promo Countdown Banner -->
+    <div class="promo-banner" id="promo-banner">
+        <div class="promo-content">
+            <span class="promo-icon">🍷</span>
+            <span class="promo-text">
+                <strong>OFERTA ESPECIAL:</strong> ¡Reserva ahora y te regalamos una botella de vino!
+            </span>
+            <span class="promo-timer">
+                Termina en: <span id="promo-countdown">00:00:00</span>
+            </span>
+            <a href="reservations.html" class="promo-cta">RESERVAR AHORA →</a>
+        </div>
+        <button class="promo-close" id="promo-close" aria-label="Cerrar">×</button>
+    </div>
 
     <main>
         <!-- Hero Section -->
@@ -472,50 +524,7 @@
             </div>
         </section>
 
-        <!-- Timeline Section -->
-        <section id="historia-timeline" class="container" style="padding: 6rem 0;">
-            <h2 class="section-title" style="text-align: center; margin-bottom: 4rem;">Nuestra Historia</h2>
 
-            <div class="timeline">
-                <div class="timeline-item" data-aos="fade-up">
-                    <div class="timeline-year">1962</div>
-                    <div class="timeline-content">
-                        <h3>🍝 Antonieta abre el restaurante</h3>
-                        <p>Con un sueño y las recetas de su abuela, Antonieta abrió las puertas de La Cucina di
-                            Mamma en el corazón de Roma.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item" data-aos="fade-up" data-aos-delay="100">
-                    <div class="timeline-year">1975</div>
-                    <div class="timeline-content">
-                        <h3>🏆 Primer premio gastronómico</h3>
-                        <p>Nuestro tiramisú tradicional gana el premio "Dolce d'Oro" de Roma, poniéndonos en el mapa
-                            culinario.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item" data-aos="fade-up" data-aos-delay="200">
-                    <div class="timeline-year">1990</div>
-                    <div class="timeline-content">
-                        <h3>🏠 Expansión del local</h3>
-                        <p>Doblamos el espacio para acoger a más familias que quieren experimentar la auténtica cocina
-                            italiana.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="timeline-item" data-aos="fade-up" data-aos-delay="300">
-                    <div class="timeline-year">2020</div>
-                    <div class="timeline-content">
-                        <h3>👨‍👩‍👧 Tradición de 3 generaciones</h3>
-                        <p>La nieta de Antonieta, Sofia, se convierte en chef ejecutiva, continuando la herencia
-                            familiar
-                            con orgullo.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- Stats Section with Live Counter -->
         <section id="estadistiques" class="stats-section" style="padding: 5rem 0; background: rgba(139, 69, 19, 0.05);">
@@ -663,34 +672,7 @@
             </div>
         </section>
 
-        <!-- Before/After Slider -->
-        <section id="evolucion" class="slider-section" style="padding: 6rem 0;">
-            <div class="container">
-                <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">La Nostra Evolució</h2>
-                <p style="text-align: center; margin-bottom: 3rem; opacity: 0.8;">Desliza per veure com hem crescut des
-                    de 1962</p>
 
-                <div class="before-after-slider">
-                    <div class="slider-container">
-                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop&blend=000&sat=-100"
-                            alt="Restaurant 1962" class="before-image">
-                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop"
-                            alt="Restaurant 2024" class="after-image">
-                        <div class="slider-handle">
-                            <div class="slider-button">⟷</div>
-                        </div>
-                        <div class="slider-label left">1962</div>
-                        <div class="slider-label right">2024</div>
-                    </div>
-                </div>
-
-                <div style="text-align: center; margin-top: 2rem;">
-                    <p style="font-style: italic; opacity: 0.8;">
-                        De un petit local familiar a un referent de la cuina italiana a Roma
-                    </p>
-                </div>
-            </div>
-        </section>
 
         <!-- Awards Section -->
         <section id="premios" class="awards-section" style="padding: 6rem 0; background: rgba(139, 69, 19, 0.03);">

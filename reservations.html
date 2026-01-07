@@ -455,6 +455,54 @@
 
                     <div class="summary-box" id="summary"></div>
 
+                    <!-- UPSELLING SECTION -->
+                    <div class="upsell-section">
+                        <div class="upsell-title">🎁 Vols afegir alguna cosa especial?</div>
+                        <p class="upsell-subtitle">Sorprèn a la teva taula amb aquests extres</p>
+
+                        <div class="upsell-options">
+                            <label class="upsell-option" onclick="toggleUpsell(this)">
+                                <input type="checkbox" name="upsell" value="chianti" data-price="25">
+                                <div class="upsell-checkbox"></div>
+                                <div class="upsell-info">
+                                    <div class="upsell-name">🍷 Ampolla de Chianti</div>
+                                    <div class="upsell-desc">Vi de la Toscana esperant-te a la taula</div>
+                                </div>
+                                <div class="upsell-price">+25€</div>
+                            </label>
+
+                            <label class="upsell-option" onclick="toggleUpsell(this)">
+                                <input type="checkbox" name="upsell" value="prosecco" data-price="30">
+                                <div class="upsell-checkbox"></div>
+                                <div class="upsell-info">
+                                    <div class="upsell-name">🥂 Prosecco Premium</div>
+                                    <div class="upsell-desc">Per brindar des del primer moment</div>
+                                </div>
+                                <div class="upsell-price">+30€</div>
+                            </label>
+
+                            <label class="upsell-option" onclick="toggleUpsell(this)">
+                                <input type="checkbox" name="upsell" value="flowers" data-price="20">
+                                <div class="upsell-checkbox"></div>
+                                <div class="upsell-info">
+                                    <div class="upsell-name">💐 Roses a la taula</div>
+                                    <div class="upsell-desc">Ram de roses fresques per a l'ocasió</div>
+                                </div>
+                                <div class="upsell-price">+20€</div>
+                            </label>
+
+                            <label class="upsell-option" onclick="toggleUpsell(this)">
+                                <input type="checkbox" name="upsell" value="cake" data-price="35">
+                                <div class="upsell-checkbox"></div>
+                                <div class="upsell-info">
+                                    <div class="upsell-name">🎂 Pastís sorpresa</div>
+                                    <div class="upsell-desc">Perfecte per aniversaris i celebracions</div>
+                                </div>
+                                <div class="upsell-price">+35€</div>
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="btn-group">
                         <button class="btn btn-secondary" id="backToDetails">← Enrere</button>
                         <button class="btn btn-primary" id="confirmReservation">✓ Confirmar Reserva</button>
@@ -530,6 +578,24 @@
         // Reservation System
         let selectedDate = null;
         let selectedTime = null;
+        let selectedUpsells = [];
+
+        // Toggle upsell option
+        function toggleUpsell(element) {
+            element.classList.toggle('selected');
+            const checkbox = element.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+
+            // Update selected upsells array
+            selectedUpsells = [];
+            document.querySelectorAll('.upsell-option.selected').forEach(option => {
+                const input = option.querySelector('input');
+                selectedUpsells.push({
+                    name: input.value,
+                    price: parseInt(input.dataset.price)
+                });
+            });
+        }
 
         // Generate Calendar
         function generateCalendar() {

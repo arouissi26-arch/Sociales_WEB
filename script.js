@@ -205,20 +205,31 @@ window.addEventListener('scroll', () => {
         else bttBtn.classList.remove('visible');
     }
 
-    // Sticky Sidebar Active State
-    document.querySelectorAll('section').forEach((sec) => {
+    // Sticky Sidebar Active State (Refactored for Performance)
+    const updateActiveDot = () => {
         const top = window.scrollY;
-        const offset = sec.offsetTop - 150;
-        const height = sec.offsetHeight;
-        const id = sec.getAttribute('id');
 
-        if (top >= offset && top < offset + height) {
-            document.querySelectorAll('.dot').forEach(dot => {
-                dot.classList.remove('active');
-                if (dot.getAttribute('href') === '#' + id) dot.classList.add('active');
-            });
-        }
-    });
+        document.querySelectorAll('section').forEach((sec) => {
+            if (!sec) return;
+            const offset = sec.offsetTop - 150;
+            const height = sec.offsetHeight;
+            const id = sec.getAttribute('id');
+
+            if (id && top >= offset && top < offset + height) {
+                document.querySelectorAll('.dot').forEach(dot => {
+                    dot.classList.remove('active');
+                    const dotHref = dot.getAttribute('href');
+                    if (dotHref === '#' + id) dot.classList.add('active');
+                });
+            }
+        });
+        scrollTicking = false;
+    };
+
+    if (!window.scrollTicking) {
+        window.requestAnimationFrame(updateActiveDot);
+        window.scrollTicking = true;
+    }
 });
 
 // Back To Top Click
@@ -849,76 +860,153 @@ if (scrollySteps.length > 0 && scrollyImages.length > 0) {
 console.log('🚀 La Cucina di Mamma - 75 Mechanics Loaded!');
 
 // ============================================
-// PHASE 6: INTERACTIVE MENU (Re-integrated)
+// PHASE 6: INTERACTIVE MENU WITH MODAL (2026)
 // ============================================
 
 const menuData = [
-    // ANTIPASTI
-    { category: 'classic', name: 'Bruschetta al Pomodoro', price: '12€', desc: 'Pa torrat amb tomàquets frescos, alfàbrega i oli d\'oliva verge extra.', image: 'assets/bruschetta_pomodoro_1767211926577.png' },
-    { category: 'classic', name: 'Carpaccio di Manzo', price: '18€', desc: 'Làmines fines de vedella crua, parmesà, rúcula i un toc de llimona.', image: 'assets/carpaccio_manzo_1767211939552.png' },
-    { category: 'classic', name: 'Caprese Clàssica', price: '14€', desc: 'Mozzarella di bufala, tomàquets de la Toscana i alfàbrega fresca.', image: 'assets/caprese_classica_1767211954139.png' },
-    { category: 'classic', name: 'Prosciutto e Melone', price: '16€', desc: 'Pernil de Parma envellit 24 mesos amb meló cantalup dolç.', image: 'assets/prosciutto_melone_1767211968253.png' },
-    { category: 'classic', name: 'Focaccia al Romaní', price: '8€', desc: 'Focaccia casolana amb romaní fresc i sal marina.', image: 'assets/focaccia_romani_1767211982175.png' },
-    { category: 'classic', name: 'Olive all’Ascolana', price: '10€', desc: 'Olives verdes gegants farcides de carn i arrebossades.', image: 'assets/olive_ascolana_1767211997378.png' },
-    { category: 'classic', name: 'Antipasto di Mare', price: '20€', desc: 'Selecció de fruits del mar marinats amb cítrics i herbes.', image: 'assets/antipasto_mare_1767212011417.png' },
-    { category: 'classic', name: 'Crostini Toscani', price: '12€', desc: 'Torrades amb paté de fetge de pollastre tradicional.', image: 'assets/crostini_toscani_1767212026350.png' },
-    { category: 'classic', name: 'Arancini Siciliani', price: '10€', desc: 'Boles d\'arròs fregides farcides de ragú i pèsols.', image: 'assets/arancini_siciliani_1767212040774.png' },
-    { category: 'classic', name: 'Burrata amb Tomàquets', price: '16€', desc: 'Burrata cremosa amb tomàquets cherry confitats.', image: 'assets/burrata_1767212055999.png' },
+    // --- ANTIPASTI (ENTRANTS) ---
+    { id: 'bruschetta', category: 'classic', name: 'Bruschetta al Pomodoro', price: '12€', desc: 'Un clàssic fresc i cruixent per començar.', ingredients: 'pa torrat, tomàquet, all, alfàbrega, oli d’oliva', image: 'https://images.unsplash.com/photo-1572695157369-a29f427324c1?w=500&h=500&fit=crop', nutrition: { calorias: 180, azucar: 4, sal: 0.8, proteinas: 4 }, alergenos: ['gluten'] },
+    { id: 'carpaccio', category: 'classic', name: 'Carpaccio di Manzo', price: '18€', desc: 'Lleuger i elegant, amb un toc cítric.', ingredients: 'vedella laminada, ruca, parmesà, llimona', image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&h=500&fit=crop', nutrition: { calorias: 220, azucar: 1, sal: 1.2, proteinas: 28 }, alergenos: ['lactosa'] },
+    { id: 'caprese', category: 'classic', name: 'Caprese Clàssica', price: '14€', desc: 'Un plat senzill i colorit originari de Capri.', ingredients: 'tomàquet, mozzarella, alfàbrega, oli d’oliva', image: 'https://images.unsplash.com/photo-1592417817098-8fd3d9eb14a5?w=500&h=500&fit=crop', nutrition: { calorias: 280, azucar: 3, sal: 0.9, proteinas: 18 }, alergenos: ['lactosa'] },
+    { id: 'prosciutto', category: 'classic', name: 'Prosciutto e Melone', price: '16€', desc: 'Contrapunt perfecte entre dolç i salat.', ingredients: 'pernil curat, meló', image: 'https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?w=500&h=500&fit=crop', nutrition: { calorias: 190, azucar: 12, sal: 2.1, proteinas: 15 }, alergenos: [] },
+    { id: 'focaccia', category: 'classic', name: 'Focaccia al Romaní', price: '8€', desc: 'Pa esponjós i aromàtic, típic de Ligúria.', ingredients: 'massa de pa, oli d’oliva, romaní', image: 'https://images.unsplash.com/photo-1573821663912-569905455b1c?w=500&h=500&fit=crop', nutrition: { calorias: 320, azucar: 2, sal: 1.5, proteinas: 8 }, alergenos: ['gluten'] },
+    { id: 'olive', category: 'classic', name: 'Olive all’Ascolana', price: '10€', desc: 'Olives farcides i arrebossades, cruixents per fora.', ingredients: 'olives grans, carn picada, pa ratllat', image: 'https://images.unsplash.com/photo-1623227866882-c005c207758f?w=500&h=500&fit=crop', nutrition: { calorias: 290, azucar: 1, sal: 1.8, proteinas: 12 }, alergenos: ['gluten', 'huevo'] },
+    { id: 'antipasto-mare', category: 'classic', name: 'Antipasto di Mare', price: '20€', desc: 'Amanida marinera fresca i lleugera.', ingredients: 'pop, musclos, calamars, llimona', image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500&h=500&fit=crop', nutrition: { calorias: 180, azucar: 2, sal: 1.4, proteinas: 22 }, alergenos: ['marisco'] },
+    { id: 'crostini', category: 'classic', name: 'Crostini Toscani', price: '12€', desc: 'Intens i rústic, típic de la Toscana.', ingredients: 'pa torrat, paté de fetge, ceba', image: 'https://images.unsplash.com/photo-1608039829572-78524f79c2c7?w=500&h=500&fit=crop', nutrition: { calorias: 240, azucar: 1, sal: 1.1, proteinas: 14 }, alergenos: ['gluten'] },
+    { id: 'arancini', category: 'classic', name: 'Arancini Siciliani', price: '10€', desc: 'Boletes d’arròs fregides, cruixents i cremoses.', ingredients: 'arròs, ragú, pèsols, mozzarella, pa ratllat', image: 'https://images.unsplash.com/photo-1595295333158-4742f28fbd85?w=500&h=500&fit=crop', nutrition: { calorias: 380, azucar: 3, sal: 1.6, proteinas: 10 }, alergenos: ['gluten', 'huevo', 'lactosa'] },
+    { id: 'burrata', category: 'classic', name: 'Burrata amb Tomàquets Cherry', price: '16€', desc: 'Molt cremosa i amb perfum d’alfàbrega.', ingredients: 'burrata, tomàquets cherry, pesto', image: 'https://images.unsplash.com/photo-1579631542720-3a87824fff86?w=500&h=500&fit=crop', nutrition: { calorias: 340, azucar: 4, sal: 0.7, proteinas: 16 }, alergenos: ['lactosa', 'frutos_secos'] },
 
-    // PRIMI
-    { category: 'classic', name: 'Spaghetti Carbonara', price: '18€', desc: 'Autèntica recepta romana amb guanciale, ou, pecorino i pebre negre.', image: 'assets/spaghetti_carbonara_1767212093654.png' },
-    { category: 'vegan', name: 'Penne all\'Arrabbiata', price: '15€', desc: 'Salsa de tomàquet picant amb all i julivert fresc.', image: 'assets/penne_arrabbiata_1767212107053.png' },
-    { category: 'classic', name: 'Lasanya Bolonyesa', price: '20€', desc: 'Capes de pasta fresca, ragú de carn i beixamel gratinada.', image: 'assets/lasanya_bolonyesa_1767212121373.png' },
-    { category: 'vegan', name: 'Risotto de Bolets', price: '22€', desc: 'Arròs Carnaroli cremós amb bolets porcini i tòfona negra.', image: 'assets/risotto_bolets_1767219328704.png' },
-    { category: 'vegan', name: 'Gnocchi al Pesto', price: '16€', desc: 'Gnocchi de patata amb pesto genovès casolà.', image: 'assets/gnocchi_pesto_1767219342535.png' },
-    { category: 'classic', name: 'Tagliatelle al Ragú', price: '19€', desc: 'Cintes de pasta a l\'ou amb salsa bolonyesa de cocció lenta.', image: 'assets/tagliatelle_ragu_1767219356880.png' },
-    { category: 'classic', name: 'Ravioli de Ricotta', price: '18€', desc: 'Pasta farcida d\'espinacs i ricotta amb mantega i sàlvia.', image: 'assets/ravioli_ricotta_1767219369318.png' },
-    { category: 'vegan', name: 'Trofie al Pesto', price: '17€', desc: 'Pasta típica de Ligúria amb patata i mongeta tendra.', image: 'assets/trofie_pesto.jpg' },
-    { category: 'classic', name: 'Spaghetti alle Vongole', price: '24€', desc: 'Spaghetti amb cloïsses fresques, vi blanc i all.', image: 'assets/spaghetti_vongole.jpg' },
-    { category: 'classic', name: 'Risotto al Safrà', price: '22€', desc: 'Risotto a la milanesa amb safrà i moll de l\'os.', image: 'assets/risotto_safra.jpg' },
+    // --- PRIMI PIATTI ---
+    { id: 'carbonara', category: 'classic', name: 'Spaghetti alla Carbonara', price: '18€', desc: 'El clàssic romà, cremós sense nata.', ingredients: 'ou, pecorino, guanciale, pebre negre', image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=500&h=500&fit=crop', nutrition: { calorias: 520, azucar: 2, sal: 1.8, proteinas: 22 }, alergenos: ['gluten', 'huevo', 'lactosa'] },
+    { id: 'arrabbiata', category: 'classic', name: 'Penne all’Arrabbiata', price: '15€', desc: 'Picant i saborós.', ingredients: 'tomàquet, all, bitxo, oli d’oliva', image: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=500&h=500&fit=crop', nutrition: { calorias: 380, azucar: 6, sal: 0.9, proteinas: 12 }, alergenos: ['gluten'] },
+    { id: 'lasanya', category: 'classic', name: 'Lasanya a la Bolonyesa', price: '20€', desc: 'Capes de pasta tendra amb salsa de carn.', ingredients: 'pasta, ragú, beixamel, parmesà', image: 'https://images.unsplash.com/photo-1574868468732-92194e7a28e3?w=500&h=500&fit=crop', nutrition: { calorias: 580, azucar: 5, sal: 2.1, proteinas: 28 }, alergenos: ['gluten', 'lactosa', 'huevo'] },
+    { id: 'risotto-bolets', category: 'classic', name: 'Risotto als Bolets', price: '22€', desc: 'Cremós i aromàtic.', ingredients: 'arròs arborio, bolets, parmesà', image: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=500&h=500&fit=crop', nutrition: { calorias: 420, azucar: 2, sal: 1.2, proteinas: 10 }, alergenos: ['lactosa'] },
+    { id: 'gnocchi', category: 'classic', name: 'Gnocchi al Pesto', price: '16€', desc: 'Suau i molt fragant.', ingredients: 'patata, alfàbrega, pinyons, parmesà', image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=500&h=500&fit=crop', nutrition: { calorias: 460, azucar: 3, sal: 1.4, proteinas: 14 }, alergenos: ['gluten', 'lactosa', 'frutos_secos'] },
+    { id: 'tagliatelle', category: 'classic', name: 'Tagliatelle al Ragù Bolonyès', price: '19€', desc: 'Recepta tradicional de Bolonya.', ingredients: 'pasta fresca, ragú, tomàquet', image: 'https://images.unsplash.com/photo-1598866594230-a269ba3aca29?w=500&h=500&fit=crop', nutrition: { calorias: 540, azucar: 4, sal: 1.6, proteinas: 24 }, alergenos: ['gluten', 'huevo'] },
+    { id: 'ravioli', category: 'classic', name: 'Ravioli de Ricotta i Espinacs', price: '18€', desc: 'Delicat i suau.', ingredients: 'pasta farcida, ricotta, espinacs, mantega i sàlvia', image: 'https://images.unsplash.com/photo-1587740986335-9917fe796397?w=500&h=500&fit=crop', nutrition: { calorias: 420, azucar: 3, sal: 1.1, proteinas: 18 }, alergenos: ['gluten', 'huevo', 'lactosa'] },
+    { id: 'trofie', category: 'classic', name: 'Trofie al Pesto Genovès', price: '17€', desc: 'Especialitat típica de Ligúria.', ingredients: 'pasta trofie, pesto, patates, mongetes tendres', image: 'https://images.unsplash.com/photo-1626844131082-256783844137?w=500&h=500&fit=crop', nutrition: { calorias: 440, azucar: 4, sal: 1.0, proteinas: 12 }, alergenos: ['gluten', 'frutos_secos'] },
+    { id: 'vongole', category: 'classic', name: 'Spaghetti alle Vongole', price: '24€', desc: 'Lleuger i mariner.', ingredients: 'cloïsses, all, vi blanc, julivert', image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=500&h=500&fit=crop', nutrition: { calorias: 380, azucar: 2, sal: 1.9, proteinas: 20 }, alergenos: ['gluten', 'marisco'] },
+    { id: 'risotto-safra', category: 'classic', name: 'Risotto a l’A safrà (Milanès)', price: '22€', desc: 'Daurat i d’aroma subtil.', ingredients: 'arròs, safrà, mantega, parmesà', image: 'https://images.unsplash.com/photo-1604152135912-04a022e23696?w=500&h=500&fit=crop', nutrition: { calorias: 480, azucar: 1, sal: 1.5, proteinas: 16 }, alergenos: ['lactosa'] },
 
-    // SECONDI
-    { category: 'classic', name: 'Pollastre Cacciatora', price: '22€', desc: 'Pollastre guisat amb tomàquet, olives i vi negre.', image: 'assets/pollastre_cacciatora.jpg' },
-    { category: 'classic', name: 'Saltimbocca', price: '26€', desc: 'Vedella amb pernil i sàlvia, saltada amb vi blanc.', image: 'assets/saltimbocca.jpg' },
-    { category: 'classic', name: 'Fiorentina', price: '65€', desc: 'Mitjana de vedella a la brasa (1kg) per compartir.', image: 'assets/fiorentina.jpg' },
-    { category: 'vegan', name: 'Albergínia Parmigiana', price: '18€', desc: 'Pastís d\'albergínia amb tomàquet i mozzarella (opció vegana disponible).', image: 'assets/parmigiana.jpg' },
-    { category: 'classic', name: 'Ossobuco', price: '28€', desc: 'Garró de vedella estofat amb gremolata tradicional.', image: 'assets/ossobuco.jpg' },
-    { category: 'classic', name: 'Mandonguilles', price: '18€', desc: 'Mandonguilles de la Mamma en salsa de tomàquet.', image: 'assets/mandonguilles.jpg' },
-    { category: 'classic', name: 'Graellada de Peix', price: '32€', desc: 'Selecció de peix i marisc fresc del dia a la planxa.', image: 'assets/graellada_peix.jpg' },
-    { category: 'classic', name: 'Calamars Farcits', price: '24€', desc: 'Calamars farcits de pa i herbes amb salsa de tomàquet.', image: 'assets/calamars_farcits.jpg' },
-    { category: 'classic', name: 'Escalopines a la Llimona', price: '20€', desc: 'Filets fins de vedella amb salsa cremosa de llimona.', image: 'assets/escalopines_llimo.jpg' },
-    { category: 'classic', name: 'Fritto Misto', price: '25€', desc: 'Fregit variat de calamars i gambes cruixents.', image: 'assets/fritto_misto.jpg' },
+    // --- SECONDI PIATTI ---
+    { id: 'cacciatora', category: 'classic', name: 'Pollastre a la Cacciatora', price: '22€', desc: 'Guisat rústic i saborós.', ingredients: 'pollastre, tomàquet, olives, vi negre', image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500&h=500&fit=crop', nutrition: { calorias: 420, azucar: 5, sal: 1.8, proteinas: 38 }, alergenos: [] },
+    { id: 'saltimbocca', category: 'classic', name: 'Saltimbocca a la Romana', price: '26€', desc: 'Tendra i molt aromàtica.', ingredients: 'vedella, pernil, sàlvia', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500&h=500&fit=crop', nutrition: { calorias: 380, azucar: 1, sal: 2.2, proteinas: 42 }, alergenos: [] },
+    { id: 'fiorentina', category: 'classic', name: 'Bistecca alla Fiorentina (1kg)', price: '65€', desc: 'Carn a la graella, sucosa i tradicional.', ingredients: 'entrecot gruixut de vedella, sal, oli', image: 'https://images.unsplash.com/photo-1600891964092-4316c288032e?w=500&h=500&fit=crop', nutrition: { calorias: 850, azucar: 0, sal: 2.5, proteinas: 95 }, alergenos: [] },
+    { id: 'parmigiana', category: 'classic', name: 'Parmigiana d’Albergínia', price: '18€', desc: 'Capa sobre capa, al forn, molt saborosa.', ingredients: 'albergínia, tomàquet, mozzarella, parmesà', image: 'https://images.unsplash.com/photo-1625938146369-adc83368bda7?w=500&h=500&fit=crop', nutrition: { calorias: 320, azucar: 8, sal: 1.4, proteinas: 14 }, alergenos: ['lactosa'] },
+    { id: 'ossobuco', category: 'classic', name: 'Ossobuco a la Milanesa', price: '28€', desc: 'Melós i ric en sabor.', ingredients: 'galta de vedella, vi blanc, verdures', image: 'https://images.unsplash.com/photo-1544025162-d76690b67f61?w=500&h=500&fit=crop', nutrition: { calorias: 480, azucar: 3, sal: 1.9, proteinas: 45 }, alergenos: ['gluten'] },
+    { id: 'mandonguilles', category: 'classic', name: 'Mandonguilles en Salsa', price: '18€', desc: 'Un clàssic reconfortant.', ingredients: 'carn picada, pa, tomàquet, espècies', image: 'https://images.unsplash.com/photo-1529042410759-befb72002fef?w=500&h=500&fit=crop', nutrition: { calorias: 420, azucar: 6, sal: 1.7, proteinas: 28 }, alergenos: ['gluten', 'huevo'] },
+    { id: 'graellada', category: 'classic', name: 'Graellada de Peix', price: '32€', desc: 'Lliure i mediterrània.', ingredients: 'gambes, calamar, peix variat', image: 'https://images.unsplash.com/photo-1534939561126-855f86654015?w=500&h=500&fit=crop', nutrition: { calorias: 280, azucar: 0, sal: 1.2, proteinas: 42 }, alergenos: ['marisco'] },
+    { id: 'calamars', category: 'classic', name: 'Calamars Farcits', price: '24€', desc: 'Tendres i aromàtics.', ingredients: 'calamars, pa ratllat, all, julivert', image: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500&h=500&fit=crop', nutrition: { calorias: 340, azucar: 4, sal: 1.6, proteinas: 26 }, alergenos: ['gluten', 'marisco'] },
+    { id: 'escalopines', category: 'classic', name: 'Escalopines al Llimó', price: '20€', desc: 'Fines, lleugeres i cítriques.', ingredients: 'vedella, llimona, mantega', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500&h=500&fit=crop', nutrition: { calorias: 360, azucar: 2, sal: 1.3, proteinas: 32 }, alergenos: ['lactosa'] },
+    { id: 'fritto-misto', category: 'classic', name: 'Fritto Misto', price: '25€', desc: 'Cruixent i molt mediterrani.', ingredients: 'peix i marisc fregit', image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=500&h=500&fit=crop', nutrition: { calorias: 480, azucar: 1, sal: 1.8, proteinas: 28 }, alergenos: ['gluten', 'marisco'] },
 
-    // DOLCI (POSTRES)
-    { category: 'postres', name: 'Tiramisú', price: '8€', desc: 'El clàssic postre de cafè, mascarpone i cacau.', image: 'assets/tiramisu.jpg' },
-    { category: 'postres', name: 'Panna Cotta', price: '8€', desc: 'Flam de nata amb coulis de fruits vermells.', image: 'assets/panna_cotta.png' },
-    { category: 'postres', name: 'Cannoli Siciliani', price: '9€', desc: 'Neules farcides de ricotta dolça i festucs.', image: 'assets/cannoli.jpg' },
-    { category: 'postres', name: 'Gelat Artesà', price: '7€', desc: 'Selecció de gelats italians fets a casa.', image: 'assets/gelat.png' },
-    { category: 'postres', name: 'Torta della Nonna', price: '9€', desc: 'Pastís de crema pastissera i pinyons.', image: 'assets/torta_della_nonna.jpg' },
-    { category: 'postres', name: 'Profiteroles', price: '9€', desc: 'Boles de pasta choux farcides de nata i cobertes de xocolata.', image: 'assets/profiteroles.jpg' },
-    { category: 'postres', name: 'Sfogliatella', price: '5€', desc: 'Pasta de full típica de Nàpols farcida de ricotta.', image: 'assets/sfogliatella.jpg' },
-    { category: 'postres', name: 'Affogato al Caffe', price: '7€', desc: 'Gelat de vainilla "ofegat" en cafè espresso calent.', image: 'assets/affogato.jpg' },
-    { category: 'postres', name: 'Cassata Siciliana', price: '10€', desc: 'Pastís tradicional amb ricotta, massapà i fruita confitada.', image: 'assets/cassata.png' },
+    // --- DOLCI ---
+    { id: 'tiramisu', category: 'postres', name: 'Tiramisù', price: '8€', desc: 'Clàssic italià, cremós i intens.', ingredients: 'mascarpone, cafè, cacau, ous', image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=500&h=500&fit=crop', nutrition: { calorias: 420, azucar: 28, sal: 0.3, proteinas: 8 }, alergenos: ['lactosa', 'huevo', 'gluten'] },
+    { id: 'panna-cotta', category: 'postres', name: 'Panna Cotta amb Fruits Vermells', price: '8€', desc: 'Suau, sedosa i refrescant.', ingredients: 'nata, vainilla, gelatina', image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500&h=500&fit=crop', nutrition: { calorias: 340, azucar: 24, sal: 0.2, proteinas: 5 }, alergenos: ['lactosa'] },
+    { id: 'cannoli', category: 'postres', name: 'Cannoli Sicilians', price: '9€', desc: 'Cruixents i cremosos alhora.', ingredients: 'ricotta, sucre, taronja confitada', image: 'https://images.unsplash.com/photo-1551024601-569d6f7e1278?w=500&h=500&fit=crop', nutrition: { calorias: 380, azucar: 22, sal: 0.4, proteinas: 10 }, alergenos: ['gluten', 'lactosa', 'frutos_secos'] },
+    { id: 'gelat', category: 'postres', name: 'Gelat Artesà Italià', price: '7€', desc: 'Cremós i sabor intens.', ingredients: 'llet, sucre, ingredients naturals', image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&h=500&fit=crop', nutrition: { calorias: 220, azucar: 18, sal: 0.1, proteinas: 4 }, alergenos: ['lactosa'] },
+    { id: 'zabaione', category: 'postres', name: 'Zabaione', price: '8€', desc: 'Crema tèbia i esponjosa.', ingredients: 'rovell, sucre, vi Marsala', image: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=500&h=500&fit=crop', nutrition: { calorias: 300, azucar: 20, sal: 0.1, proteinas: 4 }, alergenos: ['huevo'] },
+    { id: 'torta-nonna', category: 'postres', name: 'Torta della Nonna', price: '9€', desc: 'Tradicional i molt aromàtica.', ingredients: 'crema pastissera, pinyons, pasta brisa', image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476d?w=500&h=500&fit=crop', nutrition: { calorias: 360, azucar: 20, sal: 0.3, proteinas: 7 }, alergenos: ['gluten', 'huevo', 'lactosa', 'frutos_secos'] },
+    { id: 'profiteroles', category: 'postres', name: 'Profiteroles amb Xocolata', price: '9€', desc: 'Boles farcides banyades en xocolata.', ingredients: 'pasta choux, crema, xocolata', image: 'https://images.unsplash.com/photo-1550950158-d0d960dff51b?w=500&h=500&fit=crop', nutrition: { calorias: 440, azucar: 32, sal: 0.4, proteinas: 6 }, alergenos: ['gluten', 'huevo', 'lactosa'] },
+    { id: 'sfogliatella', category: 'postres', name: 'Sfogliatella Napolitana', price: '5€', desc: 'Cruixent per fora, suau per dins.', ingredients: 'pasta de full, ricotta, sèmola', image: 'https://images.unsplash.com/photo-1509456578033-066ab12d09ce?w=500&h=500&fit=crop', nutrition: { calorias: 280, azucar: 16, sal: 0.5, proteinas: 6 }, alergenos: ['gluten', 'lactosa'] },
+    { id: 'affogato', category: 'postres', name: 'Affogato al Caffè', price: '7€', desc: 'Senzill i deliciós.', ingredients: 'gelat de vainilla, cafè espresso', image: 'https://images.unsplash.com/photo-1599320641322-95f727c6225a?w=500&h=500&fit=crop', nutrition: { calorias: 180, azucar: 14, sal: 0.1, proteinas: 3 }, alergenos: ['lactosa'] },
+    { id: 'cassata', category: 'postres', name: 'Cassata Siciliana', price: '10€', desc: 'Colorida i dolça, molt festiva.', ingredients: 'pa de pessic, ricotta dolça, fruita confitada', image: 'https://images.unsplash.com/photo-1582239634288-51f71f114002?w=500&h=500&fit=crop', nutrition: { calorias: 480, azucar: 38, sal: 0.3, proteinas: 8 }, alergenos: ['gluten', 'lactosa', 'frutos_secos'] },
 
-    // VINS
-    { category: 'wines', name: 'Vega Sicilia Unico', price: '350€', desc: 'Ribera del Duero. Elegància i complexitat suprema.', image: 'assets/vega_sicilia.jpg' },
-    { category: 'wines', name: 'Chateau Margaux', price: '900€', desc: 'Bordeaux Premier Grand Cru. Llegendari i sedós.', image: 'assets/chateau_margaux.png' },
-    { category: 'wines', name: 'Clos Mogador', price: '95€', desc: 'Priorat. Potència mineral i caràcter únic.', image: 'assets/clos_mogador.jpg' },
-    { category: 'wines', name: 'Flor de Pingus', price: '180€', desc: 'Ribera del Duero. Intensitat i fruita concentrada.', image: 'assets/flor_de_pingus.png' },
-    { category: 'wines', name: 'Gramona Imperial', price: '35€', desc: 'Cava Gran Reserva. Frescor i bombolla fina.', image: 'assets/cava_gramona.jpg' },
+    // --- MENÚ VEGÀ ---
+    // Antipasti
+    { id: 'bruschetta-v', category: 'vegan', name: 'Bruschetta al Pomodoro (Vegà)', price: '12€', desc: 'Entrada fresca i cruixent.', ingredients: 'pa torrat, tomàquet, all, alfàbrega, oli d’oliva', image: 'https://images.unsplash.com/photo-1572695157369-a29f427324c1?w=500&h=500&fit=crop', nutrition: { calorias: 180 }, alergenos: ['gluten'] },
+    { id: 'caprese-v', category: 'vegan', name: 'Caprese Vegana', price: '14€', desc: 'La clàssica caprese sense productes animals.', ingredients: 'tomàquet, mozzarella vegana, alfàbrega', image: 'https://images.unsplash.com/photo-1529312266912-b33cf6227e2f?w=500&h=500&fit=crop', nutrition: { calorias: 200 }, alergenos: [] },
+    { id: 'carpaccio-v', category: 'vegan', name: 'Carpaccio de Remolatxa', price: '14€', desc: 'Cruixent i fresc.', ingredients: 'remolatxa cuita, ruca, nous, llimona', image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500&h=500&fit=crop', nutrition: { calorias: 150 }, alergenos: ['frutos_secos'] },
+    { id: 'focaccia-v', category: 'vegan', name: 'Focaccia al Romaní (Vegà)', price: '8€', desc: 'Esponjosa i aromàtica.', ingredients: 'massa de pa, oli d’oliva, romaní', image: 'https://images.unsplash.com/photo-1573821663912-569905455b1c?w=500&h=500&fit=crop', nutrition: { calorias: 320 }, alergenos: ['gluten'] },
+    { id: 'olives-v', category: 'vegan', name: 'Olives Farcides Veganes', price: '9€', desc: 'Cruixents i plenes de sabor.', ingredients: 'olives, pèsols, ametlles', image: 'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=500&h=500&fit=crop', nutrition: { calorias: 220 }, alergenos: ['frutos_secos'] },
+    { id: 'caponata-v', category: 'vegan', name: 'Caponata Siciliana', price: '12€', desc: 'Estofat de verdures sicilià.', ingredients: 'albergínia, tomàquet, api, olives', image: 'https://images.unsplash.com/photo-1529312266912-b33cf6227e2f?w=500&h=500&fit=crop', nutrition: { calorias: 240 }, alergenos: [] },
+    { id: 'hummus-v', category: 'vegan', name: 'Hummus Italià', price: '10€', desc: 'Suau i cremós amb pinyons.', ingredients: 'cigrons, llimona, pinyons', image: 'https://images.unsplash.com/photo-1637949385162-e416fb15b2ce?w=500&h=500&fit=crop', nutrition: { calorias: 300 }, alergenos: ['frutos_secos'] },
+    { id: 'arancini-v', category: 'vegan', name: 'Arancini Vegans', price: '11€', desc: 'Boletes d’arròs farcides de verdures.', ingredients: 'arròs, verdures, pa ratllat', image: 'https://images.unsplash.com/photo-1595295333158-4742f28fbd85?w=500&h=500&fit=crop', nutrition: { calorias: 350 }, alergenos: ['gluten'] },
+    { id: 'burrata-v', category: 'vegan', name: 'Burrata Vegana', price: '15€', desc: 'Cremosa amb pesto vegà.', ingredients: 'tofu, tomàquets cherry, pesto vegà', image: 'https://images.unsplash.com/photo-1579631542720-3a87824fff86?w=500&h=500&fit=crop', nutrition: { calorias: 280 }, alergenos: ['frutos_secos', 'soja'] },
+    { id: 'ensalada-v', category: 'vegan', name: 'Ensalada Mediterrània', price: '12€', desc: 'Nutritiva i fresca.', ingredients: 'cigrons, mongetes, tomàquet, pebrot', image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500&h=500&fit=crop', nutrition: { calorias: 250 }, alergenos: [] },
 
-    // MENÚ INFANTIL
-    { category: 'infantil', name: '🍝 Mini Spaghetti Bolognese', price: '8€', desc: 'Pasta amb salsa de tomàquet i carn. Porció adaptada per als més petits.', image: 'assets/spaghetti_kids.jpg' },
-    { category: 'infantil', name: '🍕 Pizza Margherita Petita', price: '7€', desc: 'Tomàquet, mozzarella i alfàbrega. Mida infantil perfecta.', image: 'assets/pizza_kids.jpg' },
-    { category: 'infantil', name: '🍗 Nuggets de Pollastre', price: '9€', desc: 'Amb patates fregides i ketchup. El favorit dels nens!', image: 'assets/nuggets_kids.png' },
-    { category: 'infantil', name: '🍨 Gelat de 3 Boles', price: '5€', desc: 'Xocolata, vainilla i maduixa. Amb salsa de xocolata.', image: 'assets/gelat_kids.jpg' },
+    // Primi Vegans
+    { id: 'spaghetti-pesto-v', category: 'vegan', name: 'Spaghetti al Pesto Vegà', price: '16€', desc: 'Cremós i aromàtic.', ingredients: 'alfàbrega, all, nous/pinyons', image: 'https://images.unsplash.com/photo-1516100882582-96c3a05fe590?w=500&h=500&fit=crop', nutrition: { calorias: 450 }, alergenos: ['gluten', 'frutos_secos'] },
+    { id: 'arrabbiata-v', category: 'vegan', name: 'Penne all’Arrabbiata (Vegà)', price: '15€', desc: 'Picant i saborós.', ingredients: 'tomàquet, all, bitxo', image: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?w=500&h=500&fit=crop', nutrition: { calorias: 380 }, alergenos: ['gluten'] },
+    { id: 'risotto-setas-v', category: 'vegan', name: 'Risotto de Bolets Vegà', price: '22€', desc: 'Cremós sense lactis.', ingredients: 'arròs, bolets, brou vegetal', image: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=500&h=500&fit=crop', nutrition: { calorias: 400 }, alergenos: [] },
+    { id: 'lasanya-v', category: 'vegan', name: 'Lasanya Vegana', price: '19€', desc: 'Capes saboroses, 100% vegetal.', ingredients: 'pasta, llenties, beixamel vegana', image: 'https://images.unsplash.com/photo-1574868468732-92194e7a28e3?w=500&h=500&fit=crop', nutrition: { calorias: 450 }, alergenos: ['gluten'] },
+    { id: 'gnocchi-v', category: 'vegan', name: 'Gnocchi amb Salsa de Tomàquet', price: '16€', desc: 'Suau i reconfortant.', ingredients: 'patata, farina, tomàquet', image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=500&h=500&fit=crop', nutrition: { calorias: 410 }, alergenos: ['gluten'] },
+    { id: 'ravioli-v', category: 'vegan', name: 'Ravioli Vegans Tofu/Espinacs', price: '18€', desc: 'Delicats i aromàtics.', ingredients: 'tofu, espinacs, oli d’oliva', image: 'https://images.unsplash.com/photo-1587740986335-9917fe796397?w=500&h=500&fit=crop', nutrition: { calorias: 400 }, alergenos: ['gluten', 'soja'] },
+    { id: 'trofie-v', category: 'vegan', name: 'Trofie al Pesto Vegà', price: '17€', desc: 'Tradicional de Ligúria.', ingredients: 'pesto vegà, patates, mongetes', image: 'https://images.unsplash.com/photo-1626844131082-256783844137?w=500&h=500&fit=crop', nutrition: { calorias: 430 }, alergenos: ['gluten', 'frutos_secos'] },
+    { id: 'vongole-v', category: 'vegan', name: 'Spaghetti "Vongole" Vegà', price: '18€', desc: 'Sabors marins amb alga wakame.', ingredients: 'alga wakame, all, oli', image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=500&h=500&fit=crop', nutrition: { calorias: 390 }, alergenos: ['gluten'] },
+    { id: 'risotto-allioli-v', category: 'vegan', name: 'Risotto All i Oli Vegà', price: '18€', desc: 'Molt aromàtic.', ingredients: 'arròs, oli, all, brou', image: 'https://images.unsplash.com/photo-1604152135912-04a022e23696?w=500&h=500&fit=crop', nutrition: { calorias: 410 }, alergenos: [] },
+    { id: 'pasta-verdure-v', category: 'vegan', name: 'Pasta al Sugo di Verdure', price: '15€', desc: 'Sabor intens casolà.', ingredients: 'verdures variades, tomàquet', image: 'https://images.unsplash.com/photo-1643661100639-de696cc791c1?w=500&h=500&fit=crop', nutrition: { calorias: 380 }, alergenos: ['gluten'] },
+
+    // Secondi Vegans
+    { id: 'pollastre-v', category: 'vegan', name: 'Pollastre Vegà Cacciatora', price: '20€', desc: 'Seitán/Tofu guisat rústic.', ingredients: 'seitan/tofu, tomàquet, olives', image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500&h=500&fit=crop', nutrition: { calorias: 350 }, alergenos: ['gluten', 'soja'] },
+    { id: 'seitan-llimo-v', category: 'vegan', name: 'Escalopines de Seitan', price: '19€', desc: 'Fines i cítriques.', ingredients: 'seitan, llimona, oli', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=500&h=500&fit=crop', nutrition: { calorias: 320 }, alergenos: ['gluten'] },
+    { id: 'parmigiana-v', category: 'vegan', name: 'Parmigiana Vegana', price: '18€', desc: 'Gratinada i saborosa.', ingredients: 'albergínia, tomàquet, formatge vegà', image: 'https://images.unsplash.com/photo-1625938146369-adc83368bda7?w=500&h=500&fit=crop', nutrition: { calorias: 310 }, alergenos: [] },
+    { id: 'ossobuco-v', category: 'vegan', name: 'Ossobuco Vegà', price: '20€', desc: 'Estofat de llegums.', ingredients: 'llenties, pastanaga, tomàquet', image: 'https://images.unsplash.com/photo-1544025162-d76690b67f61?w=500&h=500&fit=crop', nutrition: { calorias: 380 }, alergenos: [] },
+    { id: 'mandonguilles-v', category: 'vegan', name: 'Mandonguilles Veganes', price: '17€', desc: 'Cruixents i tendres.', ingredients: 'llenties/cigrons, tomàquet', image: 'https://images.unsplash.com/photo-1529042410759-befb72002fef?w=500&h=500&fit=crop', nutrition: { calorias: 340 }, alergenos: [] },
+    { id: 'graellada-v', category: 'vegan', name: 'Graellada de Verdures', price: '16€', desc: 'Senzill i colorit.', ingredients: 'carbassó, albergínia, pebrot', image: 'https://images.unsplash.com/photo-1592417817098-8fd3d9eb14a5?w=500&h=500&fit=crop', nutrition: { calorias: 200 }, alergenos: [] },
+    { id: 'calamars-v', category: 'vegan', name: 'Calamars Vegans Farcits', price: '19€', desc: 'Inspirat en el tradicional.', ingredients: 'xampinyons/tofu, herbes', image: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500&h=500&fit=crop', nutrition: { calorias: 300 }, alergenos: ['soja'] },
+    { id: 'brou-v', category: 'vegan', name: 'Brou Mediterrani', price: '14€', desc: 'Reconfortant.', ingredients: 'llegums, verdures', image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=500&h=500&fit=crop', nutrition: { calorias: 280 }, alergenos: [] },
+    { id: 'caponata-tofu-v', category: 'vegan', name: 'Caponata amb Tofu', price: '16€', desc: 'Estofat amb proteïna.', ingredients: 'albergínia, tofu, olives', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&h=500&fit=crop', nutrition: { calorias: 320 }, alergenos: ['soja'] },
+    { id: 'fritto-v', category: 'vegan', name: 'Fritto Misto Vegà', price: '18€', desc: 'Cruixent i lleuger.', ingredients: 'verdures fregides', image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=500&h=500&fit=crop', nutrition: { calorias: 360 }, alergenos: [] },
+
+    // Dolci Vegans
+    { id: 'tiramisu-v', category: 'vegan', name: 'Tiramisú Vegà', price: '8€', desc: 'Cremós sense animals.', ingredients: 'tofu/anacards, cafè', image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=500&h=500&fit=crop', nutrition: { calorias: 350 }, alergenos: ['frutos_secos', 'soja'] },
+    { id: 'pannacotta-v', category: 'vegan', name: 'Panna Cotta Vegana', price: '8€', desc: 'Suau i delicada.', ingredients: 'llet coco, agar-agar', image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500&h=500&fit=crop', nutrition: { calorias: 300 }, alergenos: [] },
+    { id: 'cannoli-v', category: 'vegan', name: 'Cannoli Vegans', price: '9€', desc: 'Cruixent i dolç.', ingredients: 'ricotta tofu, fruita', image: 'https://images.unsplash.com/photo-1551024601-569d6f7e1278?w=500&h=500&fit=crop', nutrition: { calorias: 360 }, alergenos: ['soja'] },
+    { id: 'gelat-v', category: 'vegan', name: 'Gelat Vegà', price: '7€', desc: 'Molt saborós.', ingredients: 'llet vegetal, fruita', image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&h=500&fit=crop', nutrition: { calorias: 220 }, alergenos: [] },
+    { id: 'zabaione-v', category: 'vegan', name: 'Zabaione Vegà', price: '8€', desc: 'Espumós.', ingredients: 'tofu suau, Marsala', image: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=500&h=500&fit=crop', nutrition: { calorias: 280 }, alergenos: ['soja'] },
+    { id: 'torta-nonna-v', category: 'vegan', name: 'Torta Nonna Vegana', price: '9€', desc: 'Deliciosa.', ingredients: 'crema vegana, pinyons', image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476d?w=500&h=500&fit=crop', nutrition: { calorias: 350 }, alergenos: ['gluten', 'frutos_secos'] },
+    { id: 'profiteroles-v', category: 'vegan', name: 'Profiteroles Vegans', price: '9€', desc: 'Cruixents i cremosos.', ingredients: 'xocolata, crema vegana', image: 'https://images.unsplash.com/photo-1550950158-d0d960dff51b?w=500&h=500&fit=crop', nutrition: { calorias: 380 }, alergenos: ['gluten'] },
+    { id: 'sfogliatella-v', category: 'vegan', name: 'Sfogliatella Vegana', price: '6€', desc: 'Cruixent.', ingredients: 'pasta full vegana, tofu', image: 'https://images.unsplash.com/photo-1509456578033-066ab12d09ce?w=500&h=500&fit=crop', nutrition: { calorias: 300 }, alergenos: ['gluten', 'soja'] },
+    { id: 'affogato-v', category: 'vegan', name: 'Affogato Vegà', price: '7€', desc: 'Intens.', ingredients: 'gelat vegà, cafè', image: 'https://images.unsplash.com/photo-1599320641322-95f727c6225a?w=500&h=500&fit=crop', nutrition: { calorias: 180 }, alergenos: [] },
+    { id: 'cassata-v', category: 'vegan', name: 'Cassata Vegana', price: '10€', desc: 'Festiva.', ingredients: 'ricotta tofu, fruita confitada', image: 'https://images.unsplash.com/photo-1582239634288-51f71f114002?w=500&h=500&fit=crop', nutrition: { calorias: 400 }, alergenos: ['soja'] },
+
+
+    // --- VINS (CELLER) ---
+    { id: 'vega-sicilia', category: 'wines', name: 'Vega Sicilia Único Reserva', price: '450€', desc: 'Ribera del Duero. Clàssic absolut, complexitat i elegància.', image: 'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=500&h=500&fit=crop', nutrition: {}, alergenos: [] },
+    { id: 'margaux', category: 'wines', name: 'Château Margaux 2016', price: '600€', desc: 'Bordeaux (França). Finor i equilibri llegendari.', image: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=500&h=500&fit=crop', nutrition: {}, alergenos: [] },
+    { id: 'pingus', category: 'wines', name: 'Flor de Pingus', price: '200€', desc: 'Ribera del Duero. Intens i estructurat.', image: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=500&h=500&fit=crop', nutrition: {}, alergenos: [] },
+    { id: 'clos-mogador', category: 'wines', name: 'Priorat Clos Mogador', price: '90€', desc: 'Priorat. Potència mineral.', image: 'https://images.unsplash.com/photo-1569919659476-f0852f6834f7?w=500&h=500&fit=crop', nutrition: {}, alergenos: [] },
+    { id: 'murrieta', category: 'wines', name: 'Marqués de Murrieta Reserva', price: '48€', desc: 'Rioja clàssic. Estructura i suavitat.', image: 'https://images.unsplash.com/photo-1606758683526-724d2fa8214a?w=500&h=500&fit=crop', nutrition: {}, alergenos: [] },
+    { id: 'sangre-toro', category: 'wines', name: 'Torres Sangre de Toro', price: '20€', desc: 'Catalunya. Assequible amb caràcter.', image: 'https://images.unsplash.com/photo-1606758683526-724d2fa8214a?w=500&h=500&fit=crop', nutrition: {}, alergenos: [] },
+    { id: 'gramona', category: 'wines', name: 'Caves Gramona Imperial Brut', price: '30€', desc: 'Penedès. Frescor i bombolla fina.', image: 'https://images.unsplash.com/photo-1598155523122-3842334d6c10?w=500&h=500&fit=crop', nutrition: {}, alergenos: [] },
+    { id: 'vinas-vero', category: 'wines', name: 'Viñas del Vero Macabeo', price: '15€', desc: 'Somontano. Fresc i lleuger.', image: 'https://images.unsplash.com/photo-1563968743333-06336d396974?w=500&h=500&fit=crop', nutrition: {}, alergenos: [] },
+    { id: 'castillo-liria', category: 'wines', name: 'Castillo de Liria Garnatxa', price: '12€', desc: 'Catalunya. Jove i afruitat.', image: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=500&h=500&fit=crop', nutrition: {}, alergenos: [] },
+
+    // --- INFANTIL ---
+    { id: 'spaghetti-kids', category: 'infantil', name: 'Mini Spaghetti Bolognese', price: '8€', desc: 'Pasta amb salsa de tomàquet i carn. Porció adaptada.', image: 'https://images.unsplash.com/photo-1598866594230-a269ba3aca29?w=500&h=500&fit=crop', nutrition: { calorias: 320 }, alergenos: ['gluten'] },
+    { id: 'pizza-kids', category: 'infantil', name: 'Pizza Margherita Petita', price: '7€', desc: 'Tomàquet, mozzarella i alfàbrega.', image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&h=500&fit=crop', nutrition: { calorias: 280 }, alergenos: ['gluten', 'lactosa'] },
+    { id: 'nuggets-kids', category: 'infantil', name: 'Nuggets de Pollastre', price: '9€', desc: 'Amb patates fregides i ketchup.', image: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=500&h=500&fit=crop', nutrition: { calorias: 380 }, alergenos: ['gluten', 'huevo'] },
+    { id: 'gelat-kids', category: 'infantil', name: 'Gelat de 3 Boles', price: '5€', desc: 'Xocolata, vainilla i maduixa.', image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=500&h=500&fit=crop', nutrition: { calorias: 240 }, alergenos: ['lactosa'] },
 ];
 
 const menuList = document.getElementById('menu-items');
 const revealContainer = document.getElementById('hover-reveal');
 
+// Modal Elements
+let dishModal = null;
+
+// Allergen filter state
+let activeAllergenFilters = new Set();
+let currentCategoryFilter = 'classic';
+
+// Allergen definitions
+const allergenConfig = [
+    { id: 'gluten', label: '🌾 Gluten', icon: '🌾' },
+    { id: 'lactosa', label: '🥛 Lactosa', icon: '🥛' },
+    { id: 'frutos_secos', label: '🥜 Fruits Secs', icon: '🥜' },
+    { id: 'marisco', label: '🦐 Marisc', icon: '🦐' },
+    { id: 'huevo', label: '🥚 Ou', icon: '🥚' }
+];
+
 function initMenu() {
     if (!menuList) return;
+
+    // Create allergen filter bar
+    createAllergenFilters();
+
+    // Create modal if on menu page
+    createDishModal();
 
     // Render all initially
     renderMenu('classic');
@@ -926,47 +1014,320 @@ function initMenu() {
     // Filter Buttons
     document.querySelectorAll('.menu-filter').forEach(btn => {
         btn.addEventListener('click', () => {
-            // Update Active State
             document.querySelectorAll('.menu-filter').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
-            // Filter
-            const filter = btn.dataset.filter;
-            renderMenu(filter);
+            currentCategoryFilter = btn.dataset.filter;
+            renderMenu(currentCategoryFilter);
         });
     });
+}
+
+function createAllergenFilters() {
+    // Find the menu header to insert after filters
+    const menuHeader = document.querySelector('.menu-header');
+    if (!menuHeader) return;
+
+    // Check if already exists
+    if (document.querySelector('.allergen-filter-bar')) return;
+
+    // Create filter bar HTML
+    const filterBarHTML = `
+        <div class="allergen-filter-bar">
+            <span class="allergen-filter-label">⚠️ Evitar al·lèrgens:</span>
+            <div class="allergen-pills">
+                ${allergenConfig.map(a => `
+                    <label class="allergen-pill" data-allergen="${a.id}">
+                        <input type="checkbox" value="${a.id}" />
+                        <span class="pill-content">${a.label}</span>
+                    </label>
+                `).join('')}
+            </div>
+            <button class="allergen-clear-btn" style="display: none;">✕ Netejar filtres</button>
+        </div>
+    `;
+
+    // Insert after menu header
+    menuHeader.insertAdjacentHTML('afterend', filterBarHTML);
+
+    // Add event listeners
+    document.querySelectorAll('.allergen-pill input').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+            const allergen = e.target.value;
+            const pill = e.target.closest('.allergen-pill');
+
+            if (e.target.checked) {
+                activeAllergenFilters.add(allergen);
+                pill.classList.add('active');
+            } else {
+                activeAllergenFilters.delete(allergen);
+                pill.classList.remove('active');
+            }
+
+            // Show/hide clear button
+            updateClearButton();
+
+            // Re-render menu with filters
+            renderMenu(currentCategoryFilter);
+        });
+    });
+
+    // Clear button
+    const clearBtn = document.querySelector('.allergen-clear-btn');
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            activeAllergenFilters.clear();
+            document.querySelectorAll('.allergen-pill').forEach(pill => {
+                pill.classList.remove('active');
+                pill.querySelector('input').checked = false;
+            });
+            updateClearButton();
+            renderMenu(currentCategoryFilter);
+        });
+    }
+}
+
+function updateClearButton() {
+    const clearBtn = document.querySelector('.allergen-clear-btn');
+    if (clearBtn) {
+        clearBtn.style.display = activeAllergenFilters.size > 0 ? 'inline-flex' : 'none';
+    }
+}
+
+function createDishModal() {
+    // Check if already exists
+    if (document.getElementById('dish-modal')) {
+        dishModal = document.getElementById('dish-modal');
+        return;
+    }
+
+    // Create modal HTML with new hierarchy: Image > Title > Desc > Sommelier > Nutrition (collapsible)
+    const modalHTML = `
+        <div id="dish-modal" class="dish-modal">
+            <div class="dish-modal-backdrop"></div>
+            <div class="dish-modal-content">
+                <button class="dish-modal-close" aria-label="Tancar">&times;</button>
+                <div class="dish-modal-body">
+                    <div class="dish-modal-image"></div>
+                    <div class="dish-modal-info">
+                        <h2 class="dish-modal-title"></h2>
+                        <p class="dish-modal-price"></p>
+                        <p class="dish-modal-desc"></p>
+                        
+                        <!-- Sommelier Wine Pairing Section (Premium Upselling) -->
+                        <div class="sommelier-section" style="display: none;">
+                            <div class="sommelier-header">
+                                <span class="sommelier-icon">🍷</span>
+                                <span class="sommelier-title">Suggeriment del Sommelier</span>
+                            </div>
+                            <div class="sommelier-card">
+                                <div class="sommelier-wine-img"></div>
+                                <div class="sommelier-wine-info">
+                                    <span class="sommelier-wine-name"></span>
+                                    <p class="sommelier-wine-text"></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Collapsible Nutrition Info (Discrete) -->
+                        <details class="dish-modal-nutrition-accordion">
+                            <summary>📊 Informació Nutricional</summary>
+                            <div class="dish-modal-nutrition">
+                                <table>
+                                    <tr><td>Calories</td><td class="nut-cal"></td></tr>
+                                    <tr><td>Sucre</td><td class="nut-sugar"></td></tr>
+                                    <tr><td>Sal</td><td class="nut-salt"></td></tr>
+                                    <tr><td>Proteïnes</td><td class="nut-protein"></td></tr>
+                                </table>
+                            </div>
+                        </details>
+                        
+                        <!-- Cross-Selling Section -->
+                        <div class="cross-sell-section" style="display: none;">
+                            <div class="cross-sell-title">👥 Clients també van demanar...</div>
+                            <div class="cross-sell-items"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    dishModal = document.getElementById('dish-modal');
+
+    // Close button
+    dishModal.querySelector('.dish-modal-close').addEventListener('click', closeDishModal);
+
+    // Click backdrop to close
+    dishModal.querySelector('.dish-modal-backdrop').addEventListener('click', closeDishModal);
+
+    // ESC key to close
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && dishModal.classList.contains('active')) {
+            closeDishModal();
+        }
+    });
+}
+
+function openDishModal(id) {
+    const dish = menuData.find(d => d.id === id);
+    if (!dish || !dishModal) return;
+
+    // Populate basic modal info
+    dishModal.querySelector('.dish-modal-image').style.backgroundImage = `url('${dish.image}')`;
+    dishModal.querySelector('.dish-modal-title').textContent = dish.name;
+    dishModal.querySelector('.dish-modal-price').textContent = dish.price;
+    dishModal.querySelector('.dish-modal-desc').textContent = dish.desc;
+
+    // Populate nutrition (now in collapsible)
+    dishModal.querySelector('.nut-cal').textContent = `${dish.nutrition.calorias} kcal`;
+    dishModal.querySelector('.nut-sugar').textContent = `${dish.nutrition.azucar} g`;
+    dishModal.querySelector('.nut-salt').textContent = `${dish.nutrition.sal} g`;
+    dishModal.querySelector('.nut-protein').textContent = `${dish.nutrition.proteinas} g`;
+
+    // Sommelier Wine Pairing Section
+    const sommelierSection = dishModal.querySelector('.sommelier-section');
+    if (dish.maridaje) {
+        sommelierSection.style.display = 'block';
+        dishModal.querySelector('.sommelier-wine-img').style.backgroundImage = `url('${dish.maridaje.imagen}')`;
+        dishModal.querySelector('.sommelier-wine-name').textContent = dish.maridaje.nombre;
+        dishModal.querySelector('.sommelier-wine-text').textContent = dish.maridaje.texto;
+    } else {
+        sommelierSection.style.display = 'none';
+    }
+
+    // CROSS-SELLING SECTION
+    const crossSellContainer = dishModal.querySelector('.cross-sell-section');
+    if (crossSellContainer) {
+        // Get recommendations (same category or complementary)
+        const recommendations = getRecommendations(dish.id, dish.category);
+
+        if (recommendations.length > 0) {
+            crossSellContainer.style.display = 'block';
+            const itemsContainer = crossSellContainer.querySelector('.cross-sell-items');
+            itemsContainer.innerHTML = '';
+
+            recommendations.forEach(rec => {
+                const item = document.createElement('div');
+                item.className = 'cross-sell-item';
+                item.onclick = () => openDishModal(rec.id);
+                item.innerHTML = `
+                    <img src="${rec.image}" alt="${rec.name}" onerror="this.style.display='none'">
+                    <div class="cross-sell-item-name">${rec.name}</div>
+                    <div class="cross-sell-item-price">${rec.price}</div>
+                `;
+                itemsContainer.appendChild(item);
+            });
+        } else {
+            crossSellContainer.style.display = 'none';
+        }
+    }
+
+    // Close nutrition accordion by default
+    const nutritionAccordion = dishModal.querySelector('.dish-modal-nutrition-accordion');
+    if (nutritionAccordion) {
+        nutritionAccordion.removeAttribute('open');
+    }
+
+    // Show modal with animation
+    dishModal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent scroll
+
+    // GSAP animation
+    if (typeof gsap !== 'undefined') {
+        gsap.fromTo(dishModal.querySelector('.dish-modal-content'),
+            { opacity: 0, scale: 0.9, y: 30 },
+            { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: 'power3.out' }
+        );
+    }
+}
+
+// Cross-selling recommendations
+function getRecommendations(currentId, currentCategory) {
+    // Define complementary pairings (excluding wines - they appear in maridaje)
+    const pairings = {
+        'classic': ['postres', 'vegan'],
+        'vegan': ['postres', 'classic'],
+        'postres': ['classic', 'vegan'],
+        'wines': ['classic', 'postres'],
+        'infantil': ['postres', 'classic']
+    };
+
+    // Get items from same category (excluding current) and complementary categories
+    const sameCategory = menuData.filter(d => d.category === currentCategory && d.id !== currentId);
+    const complementaryCategories = pairings[currentCategory] || [];
+    const complementary = menuData.filter(d => complementaryCategories.includes(d.category));
+
+    // Mix and get 4 random recommendations
+    const all = [...sameCategory, ...complementary];
+    const shuffled = all.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 4);
+}
+
+function closeDishModal() {
+    if (!dishModal) return;
+
+    if (typeof gsap !== 'undefined') {
+        gsap.to(dishModal.querySelector('.dish-modal-content'), {
+            opacity: 0, scale: 0.95, y: 20, duration: 0.25, ease: 'power2.in',
+            onComplete: () => {
+                dishModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    } else {
+        dishModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
 }
 
 function renderMenu(filter) {
     if (!menuList) return;
     menuList.innerHTML = '';
 
-    // GSAP Out
-    // gsap.to(menuList.children, {opacity: 0, x: -20, stagger: 0.05, onComplete: () => {
-
-    const filteredData = menuData.filter(item => {
+    // Filter by category first
+    let filteredData = menuData.filter(item => {
         if (filter === 'all') return true;
-        // Classic shows antipasti, secondi, dolci (except vegan ones if any)
-        // But category data is simplified. Let's just match category = filter for now, 
-        // except "classic" might want to show everything that isn't wine?
-        // The user had simple filters: Classic, Vegan, Wines. 
-        // My data has 'classic', 'vegan', 'wines'.
         return item.category === filter;
     });
 
-    // Loop and Create
+    // Then filter by allergens (exclude items with any selected allergen)
+    if (activeAllergenFilters.size > 0) {
+        filteredData = filteredData.filter(item => {
+            // Check if item has any of the excluded allergens
+            const itemAllergens = item.alergenos || [];
+            for (const allergen of activeAllergenFilters) {
+                if (itemAllergens.includes(allergen)) {
+                    return false; // Exclude this item
+                }
+            }
+            return true; // Keep this item
+        });
+    }
+
     filteredData.forEach(item => {
         const li = document.createElement('li');
         li.className = 'menu-item';
-        li.innerHTML = `
-                <div class="menu-item-info">
-                    <span class="menu-item-name">${item.name}</span>
-                    <span class="menu-item-desc">${item.desc}</span>
-                </div>
-                <span class="menu-item-price">${item.price}</span>
-            `;
+        li.dataset.id = item.id; // Add data-id for modal
 
-        // Hover Reveal Logic
+        // Wine pairing icon (if dish has maridaje)
+        const wineIcon = item.maridaje
+            ? `<span class="maridaje-icon" data-tooltip="Maridatge suggerit: ${item.maridaje.nombre}">🍷</span>`
+            : '';
+
+        li.innerHTML = `
+            <div class="menu-item-info">
+                <span class="menu-item-name">${item.name}${wineIcon}</span>
+                <span class="menu-item-desc">${item.desc}</span>
+            </div>
+            <span class="menu-item-price">${item.price}</span>
+        `;
+
+        // CLICK to open modal
+        li.addEventListener('click', () => {
+            openDishModal(item.id);
+        });
+
+        // Hover Reveal Logic (keep existing)
         li.addEventListener('mouseenter', () => {
             if (revealContainer && item.image) {
                 revealContainer.innerHTML = `<div class="reveal-inner" style="background-image: url('${item.image}')"></div>`;
@@ -976,15 +1337,12 @@ function renderMenu(filter) {
 
         li.addEventListener('mousemove', (e) => {
             if (revealContainer) {
-                // Position calculations for magnet effect
-                // We need to account for scrollPosition if fixed? 
-                // Css for hover-reveal is fixed usually.
                 const x = e.clientX;
                 const y = e.clientY;
                 gsap.to(revealContainer, {
                     left: x,
                     top: y,
-                    duration: 0.2, // fast follow
+                    duration: 0.2,
                     ease: "power2.out"
                 });
             }
@@ -1004,7 +1362,6 @@ function renderMenu(filter) {
         { opacity: 0, x: 20 },
         { opacity: 1, x: 0, stagger: 0.05, duration: 0.4, clearProps: "all" }
     );
-    // }});
 }
 
 // Init when DOM loaded
@@ -1059,7 +1416,7 @@ window.addEventListener('DOMContentLoaded', initMenu);
             submitBtn.textContent = '📨 Enviant...';
 
             try {
-                // Send to n8n webhook
+                // Send to n8n webhook (PRODUCTION)
                 const response = await fetch('https://aissa2026.app.n8n.cloud/webhook/restaurant-subscription', {
                     method: 'POST',
                     headers: {
@@ -1069,7 +1426,7 @@ window.addEventListener('DOMContentLoaded', initMenu);
                 });
 
                 if (response.ok) {
-                    alert('✅ Gràcies per subscriure\'t! \n\nComprova el teu correu electrònic per obtenir el teu codi de descompte del 20%. 📧');
+                    alert('✅ Gràcies per subscriure\'t! \n\nComprova el teu correu electrònic per obtenir el teu codi de descompte de 10€. 📧');
                     localStorage.setItem('newsletter_subscribed', 'true');
                     popup.classList.remove('show');
                 } else {
@@ -1538,3 +1895,559 @@ document.querySelectorAll('.music-btn').forEach(btn => {
 });
 
 console.log('✅ Menu settings loaded');
+
+// ============================================
+// GIFT CARD MODAL SYSTEM
+// ============================================
+let giftModal = null;
+let selectedGiftAmount = 0;
+
+function createGiftModal() {
+    // Check if already exists
+    if (document.getElementById('gift-modal')) {
+        giftModal = document.getElementById('gift-modal');
+        return;
+    }
+
+    const modalHTML = `
+        <div id="gift-modal" class="gift-modal">
+            <div class="gift-modal-backdrop"></div>
+            <div class="gift-modal-content">
+                <button class="gift-modal-close" aria-label="Tancar">&times;</button>
+                
+                <div class="gift-modal-header">
+                    <span class="gift-icon">🎁</span>
+                    <h2>Regala La Cucina di Mamma</h2>
+                    <p class="gift-subtitle">Una experiència gastronòmica inoblidable</p>
+                </div>
+
+                <div class="gift-modal-body">
+                    <!-- Amount Selection -->
+                    <div class="gift-section">
+                        <label class="gift-label">Selecciona l'import</label>
+                        <div class="gift-amounts">
+                            <button class="gift-amount-btn" data-amount="50">50€</button>
+                            <button class="gift-amount-btn" data-amount="100">100€</button>
+                            <button class="gift-amount-btn" data-amount="150">150€</button>
+                            <button class="gift-amount-btn custom-amount-btn">Altre</button>
+                        </div>
+                        <input type="number" class="gift-custom-input" placeholder="Import personalitzat (€)" style="display: none;" min="10" max="500">
+                    </div>
+
+                    <!-- Recipient Info -->
+                    <div class="gift-section">
+                        <label class="gift-label">Dades del destinatari</label>
+                        <input type="text" class="gift-input" id="gift-recipient-name" placeholder="Nom del destinatari" required>
+                        <input type="email" class="gift-input" id="gift-recipient-email" placeholder="Email del destinatari" required>
+                    </div>
+
+                    <!-- Sender Info -->
+                    <div class="gift-section">
+                        <label class="gift-label">Les teves dades</label>
+                        <input type="text" class="gift-input" id="gift-sender-name" placeholder="El teu nom" required>
+                        <input type="email" class="gift-input" id="gift-sender-email" placeholder="El teu email" required>
+                    </div>
+
+                    <!-- Personal Message -->
+                    <div class="gift-section">
+                        <label class="gift-label">Missatge personalitzat <span class="optional">(opcional)</span></label>
+                        <textarea class="gift-textarea" id="gift-message" placeholder="Escriu un missatge especial..." maxlength="200"></textarea>
+                    </div>
+
+                    <!-- Submit -->
+                    <button class="gift-submit-btn" disabled>
+                        <span class="btn-text">Comprar i Enviar</span>
+                        <span class="btn-price"></span>
+                    </button>
+
+                    <p class="gift-disclaimer">💳 Pagament segur. La targeta s'enviarà immediatament per email.</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    giftModal = document.getElementById('gift-modal');
+
+    // Event Listeners
+    giftModal.querySelector('.gift-modal-close').addEventListener('click', closeGiftModal);
+    giftModal.querySelector('.gift-modal-backdrop').addEventListener('click', closeGiftModal);
+
+    // Amount buttons
+    giftModal.querySelectorAll('.gift-amount-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            giftModal.querySelectorAll('.gift-amount-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const customInput = giftModal.querySelector('.gift-custom-input');
+
+            if (btn.classList.contains('custom-amount-btn')) {
+                customInput.style.display = 'block';
+                customInput.focus();
+                selectedGiftAmount = 0;
+            } else {
+                customInput.style.display = 'none';
+                selectedGiftAmount = parseInt(btn.dataset.amount);
+            }
+            updateGiftSubmitButton();
+        });
+    });
+
+    // Custom amount input
+    giftModal.querySelector('.gift-custom-input').addEventListener('input', (e) => {
+        selectedGiftAmount = parseInt(e.target.value) || 0;
+        updateGiftSubmitButton();
+    });
+
+    // Form validation
+    const inputs = giftModal.querySelectorAll('.gift-input');
+    inputs.forEach(input => {
+        input.addEventListener('input', updateGiftSubmitButton);
+    });
+
+    // Submit button
+    giftModal.querySelector('.gift-submit-btn').addEventListener('click', submitGiftCard);
+
+    // ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && giftModal.classList.contains('active')) {
+            closeGiftModal();
+        }
+    });
+}
+
+function updateGiftSubmitButton() {
+    const btn = giftModal.querySelector('.gift-submit-btn');
+    const priceSpan = btn.querySelector('.btn-price');
+
+    const recipientName = giftModal.querySelector('#gift-recipient-name').value.trim();
+    const recipientEmail = giftModal.querySelector('#gift-recipient-email').value.trim();
+    const senderName = giftModal.querySelector('#gift-sender-name').value.trim();
+    const senderEmail = giftModal.querySelector('#gift-sender-email').value.trim();
+
+    const isValid = selectedGiftAmount >= 10 && recipientName && recipientEmail && senderName && senderEmail;
+
+    btn.disabled = !isValid;
+    priceSpan.textContent = selectedGiftAmount > 0 ? `— ${selectedGiftAmount}€` : '';
+}
+
+function openGiftModal() {
+    createGiftModal();
+
+    // Reset form
+    selectedGiftAmount = 0;
+    giftModal.querySelectorAll('.gift-amount-btn').forEach(b => b.classList.remove('active'));
+    giftModal.querySelectorAll('.gift-input, .gift-textarea').forEach(i => i.value = '');
+    giftModal.querySelector('.gift-custom-input').style.display = 'none';
+    giftModal.querySelector('.gift-custom-input').value = '';
+    updateGiftSubmitButton();
+
+    giftModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    if (typeof gsap !== 'undefined') {
+        gsap.fromTo(giftModal.querySelector('.gift-modal-content'),
+            { opacity: 0, scale: 0.9, y: 40 },
+            { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: 'power3.out' }
+        );
+    }
+}
+
+function closeGiftModal() {
+    if (!giftModal) return;
+
+    if (typeof gsap !== 'undefined') {
+        gsap.to(giftModal.querySelector('.gift-modal-content'), {
+            opacity: 0, scale: 0.95, y: 30, duration: 0.3, ease: 'power2.in',
+            onComplete: () => {
+                giftModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    } else {
+        giftModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function submitGiftCard() {
+    const data = {
+        amount: selectedGiftAmount,
+        recipientName: giftModal.querySelector('#gift-recipient-name').value.trim(),
+        recipientEmail: giftModal.querySelector('#gift-recipient-email').value.trim(),
+        senderName: giftModal.querySelector('#gift-sender-name').value.trim(),
+        senderEmail: giftModal.querySelector('#gift-sender-email').value.trim(),
+        message: giftModal.querySelector('#gift-message').value.trim(),
+        timestamp: new Date().toISOString()
+    };
+
+    console.log('🎁 Gift Card Purchase:', data);
+
+    const btn = giftModal.querySelector('.gift-submit-btn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '⏳ Enviant...';
+    btn.disabled = true;
+
+    // POST to n8n webhook (PRODUCTION)
+    fetch('https://aissa2026.app.n8n.cloud/webhook/webhook/comprar-regalo', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (response.ok) {
+                btn.innerHTML = '✅ Enviat!';
+                btn.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
+
+                setTimeout(() => {
+                    closeGiftModal();
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.style.background = '';
+                        btn.disabled = false;
+                    }, 500);
+                }, 1500);
+            } else {
+                throw new Error('Error del servidor');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            btn.innerHTML = '❌ Error - Torna-ho a provar';
+            btn.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+            btn.disabled = false;
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '';
+            }, 3000);
+        });
+}
+
+// Initialize gift button listener
+document.addEventListener('DOMContentLoaded', () => {
+    // Add click listener for gift buttons
+    document.querySelectorAll('.gift-btn, [data-action="gift"]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openGiftModal();
+        });
+    });
+});
+
+console.log('✅ Gift Card system loaded');
+
+// ============================================
+// AI CONCIERGE CHAT WIDGET
+// ============================================
+
+const AIConcierge = (() => {
+    // DOM Elements
+    const widget = document.getElementById('ai-chat-widget');
+    const trigger = document.getElementById('ai-chat-trigger');
+    const chatWindow = document.getElementById('ai-chat-window');
+    const closeBtn = document.getElementById('ai-chat-close');
+    const messagesContainer = document.getElementById('ai-chat-messages');
+    const typingIndicator = document.getElementById('ai-chat-typing');
+    const inputField = document.getElementById('ai-chat-input');
+    const sendBtn = document.getElementById('ai-chat-send');
+    const badge = document.querySelector('.ai-chat-badge');
+
+    if (!widget || !trigger) return null;
+
+    // Configuration
+    const CONFIG = {
+        // IMPORTANT: Replace with your actual n8n webhook URL
+        webhookUrl: 'https://aissa2026.app.n8n.cloud/webhook/webhook/chat-concierge',
+        sessionId: generateSessionId(),
+        welcomeMessage: getWelcomeMessage()
+    };
+
+    let isOpen = false;
+    let isFirstOpen = true;
+
+    // Generate unique session ID
+    function generateSessionId() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+    // Get welcome message based on language
+    function getWelcomeMessage() {
+        const lang = document.documentElement.lang || 'ca';
+        const messages = {
+            'ca': 'Hola! Sóc Antonieta, la teva concierge virtual 👩‍🍳 Em pots preguntar sobre el menú, fer una reserva o qualsevol altra cosa. Com et puc ajudar avui?',
+            'es': '¡Hola! Soy Antonieta, tu concierge virtual 👩‍🍳 Puedes preguntarme sobre el menú, hacer una reserva o cualquier otra cosa. ¿Cómo puedo ayudarte hoy?',
+            'en': 'Hello! I\'m Antonieta, your virtual concierge 👩‍🍳 You can ask me about the menu, make a reservation, or anything else. How can I help you today?',
+            'it': 'Ciao! Sono Antonieta, la tua concierge virtuale 👩‍🍳 Puoi chiedermi del menù, fare una prenotazione o qualsiasi altra cosa. Come posso aiutarti oggi?'
+        };
+        return messages[lang] || messages['ca'];
+    }
+
+    // Initialize with GSAP animation
+    function init() {
+        // Show trigger button after scroll
+        gsap.set(trigger, { opacity: 0, scale: 0.8, y: 20 });
+
+        ScrollTrigger.create({
+            start: 'top -200',
+            onEnter: () => {
+                trigger.classList.add('visible');
+                gsap.to(trigger, {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.6,
+                    ease: 'back.out(1.7)'
+                });
+            },
+            onLeaveBack: () => {
+                if (!isOpen) {
+                    trigger.classList.remove('visible');
+                    gsap.to(trigger, {
+                        opacity: 0,
+                        scale: 0.8,
+                        y: 20,
+                        duration: 0.4,
+                        ease: 'power2.in'
+                    });
+                }
+            }
+        });
+
+        // Event listeners
+        trigger.addEventListener('click', toggleChat);
+        closeBtn.addEventListener('click', closeChat);
+        sendBtn.addEventListener('click', sendMessage);
+        inputField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Magnetic effect for cursor
+        if (typeof cursor !== 'undefined' && cursor) {
+            trigger.addEventListener('mouseenter', () => {
+                gsap.to(cursor, { scale: 2.5, opacity: 0.4 });
+            });
+            trigger.addEventListener('mouseleave', () => {
+                gsap.to(cursor, { scale: 1, opacity: 1 });
+            });
+        }
+    }
+
+    // Toggle chat window
+    function toggleChat() {
+        isOpen ? closeChat() : openChat();
+    }
+
+    // Open chat
+    function openChat() {
+        isOpen = true;
+        chatWindow.classList.add('open');
+        inputField.focus();
+        hideBadge();
+
+        // Show welcome message on first open
+        if (isFirstOpen) {
+            isFirstOpen = false;
+            setTimeout(() => {
+                addMessage(CONFIG.welcomeMessage, 'bot');
+            }, 500);
+        }
+    }
+
+    // Close chat
+    function closeChat() {
+        isOpen = false;
+        chatWindow.classList.remove('open');
+    }
+
+    // Hide notification badge
+    function hideBadge() {
+        if (badge) {
+            badge.style.display = 'none';
+        }
+    }
+
+    // Add message to chat
+    function addMessage(text, sender) {
+        const messageEl = document.createElement('div');
+        messageEl.className = `ai-message ${sender}`;
+        messageEl.textContent = text;
+        messagesContainer.appendChild(messageEl);
+        scrollToBottom();
+    }
+
+    // Scroll to bottom of messages
+    function scrollToBottom() {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // Show typing indicator
+    function showTyping() {
+        typingIndicator.classList.add('visible');
+        scrollToBottom();
+    }
+
+    // Hide typing indicator
+    function hideTyping() {
+        typingIndicator.classList.remove('visible');
+    }
+
+    // Send message
+    async function sendMessage() {
+        const text = inputField.value.trim();
+        if (!text) return;
+
+        // User message
+        addMessage(text, 'user');
+        inputField.value = '';
+        showTyping();
+
+        try {
+            // Send to n8n webhook
+            const response = await fetch(CONFIG.webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sessionId: CONFIG.sessionId,
+                    message: text,
+                    language: document.documentElement.lang || 'ca'
+                })
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+
+            const data = await response.json();
+            const botMessage = data.output || "Em sap greu, estic tenint problemes de connexió. Si us plau, truca'ns directament.";
+
+            hideTyping();
+            addMessage(botMessage, 'bot');
+
+        } catch (error) {
+            addMessage(errorMessages[lang] || errorMessages['ca'], 'bot');
+        }
+
+        sendBtn.disabled = false;
+        inputField.focus();
+    }
+
+    // Initialize
+    init();
+
+    // Public API
+    return {
+        open: openChat,
+        close: closeChat,
+        toggle: toggleChat,
+        addMessage: addMessage
+    };
+})();
+
+console.log('✅ AI Concierge Chat loaded');
+
+// ============================================
+// PROMO COUNTDOWN BANNER
+// ============================================
+
+const PromoBanner = (() => {
+    const banner = document.getElementById('promo-banner');
+    const countdown = document.getElementById('promo-countdown');
+    const closeBtn = document.getElementById('promo-close');
+
+    if (!banner || !countdown) return null;
+
+    const STORAGE_KEY = 'promo_banner_closed';
+    const PROMO_DURATION_HOURS = 24; // Promo duration
+
+    // Check if user closed the banner today
+    function wasClosedToday() {
+        const closedDate = localStorage.getItem(STORAGE_KEY);
+        if (!closedDate) return false;
+
+        const closedTime = new Date(closedDate);
+        const now = new Date();
+        const hoursDiff = (now - closedTime) / (1000 * 60 * 60);
+
+        return hoursDiff < 24; // Show again after 24h
+    }
+
+    // Get end time (end of today or custom)
+    function getEndTime() {
+        const stored = localStorage.getItem('promo_end_time');
+        if (stored) {
+            const endTime = new Date(stored);
+            if (endTime > new Date()) return endTime;
+        }
+
+        // Set new end time (end of today at 23:59:59)
+        const endTime = new Date();
+        endTime.setHours(23, 59, 59, 999);
+        localStorage.setItem('promo_end_time', endTime.toISOString());
+        return endTime;
+    }
+
+    // Update countdown
+    function updateCountdown() {
+        const endTime = getEndTime();
+        const now = new Date();
+        const diff = endTime - now;
+
+        if (diff <= 0) {
+            countdown.textContent = '00:00:00';
+            // Reset for next day
+            localStorage.removeItem('promo_end_time');
+            return;
+        }
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        countdown.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    // Show banner
+    function show() {
+        if (wasClosedToday()) return;
+
+        setTimeout(() => {
+            banner.classList.add('visible');
+            document.body.classList.add('promo-active');
+        }, 1500); // Delay after page load
+
+        // Start countdown
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    }
+
+    // Close banner
+    function close() {
+        banner.classList.remove('visible');
+        document.body.classList.remove('promo-active');
+        localStorage.setItem(STORAGE_KEY, new Date().toISOString());
+
+        setTimeout(() => {
+            banner.classList.add('hidden');
+        }, 500);
+    }
+
+    // Event listeners
+    if (closeBtn) {
+        closeBtn.addEventListener('click', close);
+    }
+
+    // Initialize
+    show();
+
+    return { show, close };
+})();
+
+console.log('✅ Promo Banner loaded');

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #d32f2f 0%, #8B4513 100%);
+            padding: 50px 30px;
+            text-align: center;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: linear-gradient(135deg, #d32f2f 0%, #8B4513 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 0);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 36px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 1px;
+        }
+
+        .header .emoji {
+            font-size: 64px;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .content {
+            padding: 50px 40px;
+            background-color: #ffffff;
+        }
+
+        .greeting {
+            font-size: 26px;
+            color: #d32f2f;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .intro-text {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .code-container {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin: 35px 0;
+            border: 3px solid #d32f2f;
+            box-shadow: 0 8px 20px rgba(211, 47, 47, 0.2);
+        }
+
+        .code-label {
+            font-size: 13px;
+            color: #8B4513;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .verification-code {
+            font-size: 64px;
+            font-weight: 800;
+            color: #d32f2f;
+            letter-spacing: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .details-box {
+            background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+            border-left: 5px solid #8B4513;
+            padding: 25px;
+            margin: 35px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .details-title {
+            font-size: 20px;
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-item {
+            font-size: 16px;
+            color: #555;
+            margin: 12px 0;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            transition: transform 0.2s;
+        }
+
+        .detail-item:hover {
+            transform: translateX(5px);
+        }
+
+        .detail-icon {
+            margin-right: 15px;
+            font-size: 22px;
+        }
+
+        .expiry-notice {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 18px;
+            margin: 25px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+        }
+
+        .expiry-notice p {
+            margin: 0;
+            color: #856404;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: #ecf0f1;
+            padding: 35px;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer strong {
+            font-size: 18px;
+            color: #fff;
+        }
+
+        .footer a {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #d32f2f, transparent);
+            margin: 35px 0;
+            border-radius: 2px;
+        }
+
+        .footer-divider {
+            width: 80px;
+            height: 3px;
+            background: #d32f2f;
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="emoji">🍝</div>
+            <h1>La Cucina di Mamma</h1>
+        </div>
+
+        <div class="content">
+            <div class="greeting">Hola {{ $json.nombre }}! 👋</div>
+
+            <p class="intro-text">
+                Gràcies per escollir el nostre restaurant. Per confirmar la teva reserva, si us plau utilitza el següent
+                codi de verificació:
+            </p>
+
+            <div class="code-container">
+                <div class="code-label">El Teu Codi de Verificació</div>
+                <div class="verification-code">{{ $json.codigo }}</div>
+            </div>
+
+            <div class="expiry-notice">
+                <p>⏰ Aquest codi és vàlid durant 15 minuts</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="details-box">
+                <div class="details-title">📋 Detalls de la Teva Reserva</div>
+                <div class="detail-item">
+                    <span class="detail-icon">📅</span>
+                    <span><strong>Data:</strong> {{ $json.fecha }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-icon">🕐</span>
+                    <span><strong>Hora:</strong> {{ $json.hora }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-icon">👥</span>
+                    <span><strong>Comensals:</strong> {{ $json.comensales }} persones</span>
+                </div>
+            </div>
+
+            <p class="intro-text">
+                Si no has sol·licitat aquesta reserva, si us plau ignora aquest correu.
+            </p>
+
+            <p class="intro-text" style="margin-top: 35px;">
+                Esperem veure't aviat! 🌟<br>
+                <strong>L'equip de La Cucina di Mamma</strong>
+            </p>
+        </div>
+
+        <div class="footer">
+            <p><strong>La Cucina di Mamma</strong></p>
+            <div class="footer-divider"></div>
+            <p>Via dei Condotti, Roma</p>
+            <p>📞 +39 327 091 3317</p>
+            <p style="margin-top: 20px; font-size: 12px; opacity: 0.8;">
+                Aquest és un correu automàtic, si us plau no responguis a aquest missatge.
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
