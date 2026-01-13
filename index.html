@@ -291,9 +291,11 @@
     <main>
         <!-- Hero Section -->
         <section id="hero">
-            <h1><span class="scramble-text liquid">La Cucina di Mamma</span></h1>
-            <p>Un restaurant italià situat al centre de Roma, on cada plat explica una història i cada aroma desperta un
-                record.</p>
+            <div class="hero-content">
+                <h1><span class="scramble-text liquid">La Cucina di Mamma</span></h1>
+                <p>Un restaurant italià situat al centre de Roma, on cada plat explica<br>
+                    una història i cada aroma desperta un record.</p>
+            </div>
         </section>
 
         <!-- Infinite Marquee -->
@@ -562,11 +564,50 @@
                 </div>
             </div>
 
-            <div style="margin-top: 4rem" class="gs-reveal">
-                <h3>Filosofia Sostenible</h3>
-                <p>Al nostre restaurant italià creiem que la bona cuina comença a la terra. Parcel·les petites (
-                    <1 ha) delimitades per elements naturals. Prioritzem l'agricultura ecològica: sense pesticides
-                        artificials ni GMOs. Adobs orgànics i respecte per la biodiversitat i els ritmes naturals.</p>
+            <div style="margin-top: 4rem; display: flex; gap: 3rem; align-items: center; flex-wrap: wrap;"
+                class="gs-reveal">
+                <div style="flex: 1.5; min-width: 300px;">
+                    <h3>Filosofia Sostenible</h3>
+                    <p>La nostra granja a la Toscana compta amb parcel·les petites (< 1 ha) delimitades per tanques
+                            vegetals i arbres que s'integren en el paisatge toscà. Aquesta estructura afavoreix la
+                            diversificació agrícola, la rotació de conreus i la fertilitat del sòl.</p>
+                            <p>Cultivem els nostres ingredients mitjançant agricultura ecològica, sense productes
+                                químics ni organismes modificats genèticament, utilitzant adobs orgànics i mètodes
+                                naturals que garanteixen aliments frescos, saludables i plens de sabor.</p>
+                            <p>Aquest compromís amb la sostenibilitat ens permet oferir una cuina italiana autèntica,
+                                cuidant el medi ambient i donant suport al desenvolupament del món rural. Cada plat
+                                reflecteix la nostra passió per la tradició i l'amor pel bon menjar.</p>
+                </div>
+                <div style="flex: 1; min-width: 250px;">
+                    <img src="https://images.unsplash.com/photo-1595351298020-038700609878?w=600&h=800&fit=crop&q=80"
+                        alt="Agricultura ecològica a la Toscana"
+                        style="border-radius: 12px; width: 100%; height: auto; object-fit: cover; box-shadow: 0 8px 30px rgba(0,0,0,0.15);">
+                </div>
+            </div>
+        </section>
+
+        <!-- La Pesca Section -->
+        <section id="pesca" class="container gs-reveal">
+            <div style="display: flex; gap: 4rem; align-items: start; flex-wrap: wrap;">
+                <div style="flex: 1.5; min-width: 300px;">
+                    <h2>La Pesca</h2>
+                    <p>Al nostre restaurant, el peix que utilitzem prové de la pesca local, realitzada per pescadors de
+                        la zona que surten a la mar a primera hora del matí. Seleccionem acuradament les captures,
+                        donant prioritat a les espècies de temporada i als mètodes de pesca sostenibles, per garantir la
+                        frescor del producte i el respecte pel medi marí.</p>
+                    <p>Un cop el peix arriba al port, es transporta en condicions de fred controlat fins al nostre
+                        restaurant per conservar-ne la qualitat. En arribar, es revisa el seu estat, es neteja
+                        correctament i s'emmagatzema a les cambres frigorífiques seguint les normes d'higiene i
+                        seguretat alimentària. Posteriorment, els nostres cuiners el preparen segons cada recepta: es
+                        talla, es marina o es cuina al moment per mantenir-ne el sabor i la textura.</p>
+                    <p>Finalment, el peix es presenta en plats curosament elaborats i es serveix als clients, oferint
+                        una experiència gastronòmica fresca, saludable i de qualitat, del mar a taula.</p>
+                </div>
+                <div style="flex: 1; min-width: 250px;">
+                    <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=800&fit=crop&q=80"
+                        alt="Pesca local al port"
+                        style="border-radius: 12px; width: 100%; height: auto; object-fit: cover; box-shadow: 0 8px 30px rgba(0,0,0,0.15);">
+                </div>
             </div>
         </section>
 

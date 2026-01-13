@@ -166,6 +166,36 @@ nav a {
     text-align: center;
     position: relative;
     padding: 0 2rem;
+    overflow: hidden;
+}
+
+/* Spline 3D Background */
+.hero-spline-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: auto;
+}
+
+.hero-spline-bg iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Hero Content (text overlay) */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.hero-content h1,
+.hero-content p {
+    pointer-events: auto;
 }
 
 #hero h1 {
@@ -180,6 +210,8 @@ nav a {
     max-width: 600px;
     opacity: 0;
     transform: translateY(30px);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Generic Section Styles */
@@ -5716,5 +5748,235 @@ body.dark-mode .press-section {
 
     .press-logo {
         font-size: 1.2rem;
+    }
+}
+
+/* ============================================
+   EL NOSTRE RESTAURANT - 3D SECTION
+   ============================================ */
+
+.restaurant-3d-section {
+    padding: 8rem 0 4rem;
+    min-height: 100vh;
+    background: linear-gradient(180deg, var(--bg-color) 0%, #1a1a1a 50%, #0a0a0a 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.restaurant-3d-section .container {
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 10;
+}
+
+.restaurant-3d-section h2 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.restaurant-3d-section .section-label {
+    color: var(--accent-color);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.restaurant-3d-section .section-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* 3D Model Viewer Container */
+.model-viewer-container {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    min-height: 500px;
+    max-height: 800px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 0 auto;
+    max-width: 1400px;
+    background: radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 100%);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+#restaurant-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: grab;
+}
+
+#restaurant-canvas:active {
+    cursor: grabbing;
+}
+
+/* Loading State */
+.model-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    z-index: 20;
+}
+
+.model-loading p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--accent-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-progress {
+    width: 200px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin: 1rem auto 0;
+    overflow: hidden;
+}
+
+.loading-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent-color), var(--accent-tertiary));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+/* Model Controls */
+.model-controls {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 15;
+}
+
+.model-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.model-btn:hover {
+    background: var(--accent-color);
+    transform: scale(1.1);
+}
+
+.model-btn.active {
+    background: var(--accent-color);
+}
+
+/* Info Cards Overlay */
+.model-info-cards {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    z-index: 15;
+}
+
+.info-card {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    color: #fff;
+    text-align: center;
+    min-width: 100px;
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-5px);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.info-icon {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.info-card h4 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    color: #fff;
+}
+
+.info-card p {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin: 0;
+}
+
+/* Responsive adjustments for 3D section */
+@media (max-width: 768px) {
+    .restaurant-3d-section {
+        padding: 4rem 1rem;
+    }
+
+    .model-viewer-container {
+        height: 50vh;
+        min-height: 350px;
+        border-radius: 12px;
+    }
+
+    .model-info-cards {
+        flex-wrap: wrap;
+        bottom: 4.5rem;
+        left: 1rem;
+        right: 1rem;
+        justify-content: center;
+    }
+
+    .info-card {
+        padding: 0.75rem 1rem;
+        min-width: 80px;
+    }
+
+    .model-controls {
+        bottom: 1rem;
+        right: 1rem;
     }
 }
