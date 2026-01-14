@@ -38,8 +38,8 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    cursor: none;
-    /* Hide default cursor */
+    cursor: auto;
+    /* Show default cursor */
 }
 
 /* Custom Cursor */
@@ -750,8 +750,8 @@ main {
 
 .team-grid:hover .team-card:hover {
     opacity: 1;
-    cursor: none;
-    /* Keep custom cursor */
+    cursor: pointer;
+    /* Show pointer cursor */
 }
 
 /* 11. Image Scale on Hover */
