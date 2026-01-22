@@ -1430,7 +1430,7 @@ window.addEventListener('DOMContentLoaded', initMenu);
 
             try {
                 // Send to n8n webhook (PRODUCTION)
-                const response = await fetch('https://aissa2026.app.n8n.cloud/webhook/restaurant-subscription', {
+                const response = await fetch('https://aissa2029.app.n8n.cloud/webhook/restaurant-subscription', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -2102,7 +2102,7 @@ function submitGiftCard() {
     btn.disabled = true;
 
     // POST to n8n webhook (PRODUCTION)
-    fetch('https://aissa2026.app.n8n.cloud/webhook/webhook/comprar-regalo', {
+    fetch('https://aissa2029.app.n8n.cloud/webhook/webhook/comprar-regalo', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -2173,7 +2173,7 @@ const AIConcierge = (() => {
     // Configuration
     const CONFIG = {
         // IMPORTANT: Replace with your actual n8n webhook URL
-        webhookUrl: 'https://aissa2026.app.n8n.cloud/webhook/webhook/chat-concierge',
+        webhookUrl: 'https://aissa2029.app.n8n.cloud/webhook/webhook/chat-concierge',
         sessionId: generateSessionId(),
         welcomeMessage: getWelcomeMessage()
     };

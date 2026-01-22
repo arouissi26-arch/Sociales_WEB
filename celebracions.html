@@ -569,7 +569,7 @@
 
             try {
                 // Enviar a n8n webhook (producció)
-                const response = await fetch('https://aissa2026.app.n8n.cloud/webhook/celebracio-code', {
+                const response = await fetch('https://aissa2029.app.n8n.cloud/webhook/celebracio-code', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formDataGlobal)
@@ -611,7 +611,7 @@
 
             try {
                 // Verificar amb n8n webhook (producció)
-                const response = await fetch('https://aissa2026.app.n8n.cloud/webhook/celebracio-verify', {
+                const response = await fetch('https://aissa2029.app.n8n.cloud/webhook/celebracio-verify', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -663,7 +663,7 @@
             e.preventDefault();
 
             try {
-                await fetch('https://aissa2026.app.n8n.cloud/webhook/celebracio-code', {
+                await fetch('https://aissa2029.app.n8n.cloud/webhook/celebracio-code', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formDataGlobal)
